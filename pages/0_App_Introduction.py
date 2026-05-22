@@ -25,6 +25,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+render_contact_card(Path(__file__).resolve().parents[1] / "Cody.JPG")
+
 st.markdown(
     """
     <div class="section-band">
@@ -86,8 +88,4 @@ projects = [
 for col, project in zip(card_cols, projects):
     with col:
         render_project_card(project["title"], project["status"], project["body"])
-
-st.divider()
-
-render_contact_card(Path(__file__).resolve().parents[1] / "Cody.JPG")
 
