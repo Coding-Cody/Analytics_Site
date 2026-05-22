@@ -156,7 +156,7 @@ spend_fig = px.area(
     x="week",
     y="spend",
     color="channel",
-    color_discrete_map={channel: details["color"] for channel, details in CHANNELS.items()},
+    color_discrete_map=SOFT_CHANNEL_COLORS,
     title="Media Spend Over Time by Channel",
     labels={"week": "Week", "spend": "Spend", "channel": "Channel"},
 )
@@ -236,12 +236,12 @@ adstock_fig = px.line(
     x="week",
     y="adstocked_spend",
     color="channel",
-    color_discrete_map={channel: details["color"] for channel, details in CHANNELS.items()},
+    color_discrete_map=SOFT_CHANNEL_COLORS,
     title="Ad-stocked Media Pressure",
     labels={"week": "Week", "adstocked_spend": "Ad-stocked spend", "channel": "Channel"},
 )
 adstock_fig.update_layout(hovermode="x unified")
-adstock_fig.update_traces(line_width=2.5)
+adstock_fig.update_traces(line_width=2.4, opacity=0.9)
 st.plotly_chart(adstock_fig, width="stretch")
 render_insight(
     "Ad-stock captures memory: TV and YouTube retain influence longer, while search decays faster. This prevents the model from forcing all media impact into the week spend occurred."
@@ -254,7 +254,7 @@ with curve_col:
         x="weekly_spend",
         y="expected_contribution",
         color="channel",
-        color_discrete_map={channel: details["color"] for channel, details in CHANNELS.items()},
+        color_discrete_map=SOFT_CHANNEL_COLORS,
         title="Saturation Curves",
         labels={
             "weekly_spend": "Weekly spend",
@@ -262,7 +262,7 @@ with curve_col:
             "channel": "Channel",
         },
     )
-    curve_fig.update_traces(line_width=2.5)
+    curve_fig.update_traces(line_width=2.4, opacity=0.9)
     st.plotly_chart(curve_fig, width="stretch")
     render_insight(
         "Saturation curves show diminishing returns. The Hill function makes this explicit: alpha controls steepness and ec50 controls how quickly the channel reaches half of its maximum response."
@@ -274,11 +274,11 @@ with marginal_col:
         x="weekly_spend",
         y="marginal_return",
         color="channel",
-        color_discrete_map={channel: details["color"] for channel, details in CHANNELS.items()},
+        color_discrete_map=SOFT_CHANNEL_COLORS,
         title="Marginal Return by Spend Level",
         labels={"weekly_spend": "Weekly spend", "marginal_return": "Marginal return"},
     )
-    marginal_fig.update_traces(line_width=2.5)
+    marginal_fig.update_traces(line_width=2.4, opacity=0.9)
     st.plotly_chart(marginal_fig, width="stretch")
     render_insight(
         "Marginal return is the planning layer: channels with high average ROI may still be poor candidates for incremental budget if their posterior response curve is already near saturation."
@@ -310,12 +310,12 @@ scenario_fig = px.bar(
     x="channel",
     y="estimated_incremental_contribution",
     color="channel",
-    color_discrete_map={channel: details["color"] for channel, details in CHANNELS.items()},
+    color_discrete_map=SOFT_CHANNEL_COLORS,
     title=f"Estimated Contribution from a {budget_change:+d}% Selected-channel Budget Scenario",
     labels={"channel": "Channel", "estimated_incremental_contribution": "Incremental contribution"},
 )
 scenario_fig.update_layout(showlegend=False)
-scenario_fig.update_traces(marker_line_width=0)
+scenario_fig.update_traces(marker_line_width=0, opacity=0.88, textfont_color="#4f5b53")
 st.plotly_chart(scenario_fig, width="stretch")
 render_insight(
     "A production optimizer would apply constraints, uncertainty intervals, minimum spend thresholds, and saturation-aware response functions before final recommendation."
