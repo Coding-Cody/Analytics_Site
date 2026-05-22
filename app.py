@@ -2,13 +2,17 @@ from __future__ import annotations
 
 import streamlit as st
 
+from utils.ui import inject_global_styles
+
 
 st.set_page_config(
     page_title="Cody Xu | Data Science Portfolio",
     page_icon=":bar_chart:",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
+
+inject_global_styles()
 
 pages = [
     st.Page("pages/0_App_Introduction.py", title="App Introduction", icon=":material/home:"),
@@ -34,5 +38,5 @@ pages = [
     ),
 ]
 
-navigation = st.navigation(pages)
+navigation = st.navigation(pages, position="top")
 navigation.run()

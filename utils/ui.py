@@ -2,48 +2,93 @@ from __future__ import annotations
 
 import html
 
+import plotly.io as pio
 import streamlit as st
 
 
 def inject_global_styles() -> None:
+    pio.templates["portfolio_premium"] = {
+        "layout": {
+            "font": {"family": "Arial, sans-serif", "color": "#17211b"},
+            "paper_bgcolor": "rgba(255,253,247,0)",
+            "plot_bgcolor": "rgba(255,253,247,0.72)",
+            "colorway": ["#0f766e", "#7c3aed", "#b7791f", "#2563eb", "#be185d", "#475569"],
+            "xaxis": {
+                "gridcolor": "rgba(102,113,102,0.14)",
+                "linecolor": "rgba(102,113,102,0.20)",
+                "zerolinecolor": "rgba(102,113,102,0.18)",
+            },
+            "yaxis": {
+                "gridcolor": "rgba(102,113,102,0.14)",
+                "linecolor": "rgba(102,113,102,0.20)",
+                "zerolinecolor": "rgba(102,113,102,0.18)",
+            },
+            "legend": {"orientation": "h", "y": 1.08, "x": 0},
+            "margin": {"l": 32, "r": 24, "t": 72, "b": 48},
+            "title": {"font": {"size": 18, "color": "#17211b"}},
+        }
+    }
+    pio.templates.default = "portfolio_premium"
+
     st.markdown(
         """
         <style>
             :root {
-                --ink: #111827;
-                --muted: #526071;
-                --line: #dbe3ef;
-                --soft: #f6f8fb;
-                --blue: #2563eb;
-                --teal: #0f766e;
+                --ink: #17211b;
+                --muted: #667166;
+                --line: #ded8c7;
+                --soft: #f7f6f1;
+                --panel: rgba(255, 253, 247, 0.90);
+                --accent: #0f766e;
+                --accent-2: #7c3aed;
+                --gold: #b7791f;
                 --rose: #be185d;
+                --shadow: 0 18px 48px rgba(34, 45, 38, 0.10);
             }
             .stApp {
                 background:
-                    radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.10), transparent 34rem),
-                    linear-gradient(180deg, #fbfcfe 0%, #f5f7fb 42%, #ffffff 100%);
+                    linear-gradient(180deg, #f7f6f1 0%, #f1eee6 45%, #fbfaf6 100%);
             }
             .block-container {
-                padding-top: 2rem;
+                padding-top: 1.35rem;
                 padding-bottom: 3rem;
-                max-width: 1240px;
+                max-width: 1260px;
             }
             h1, h2, h3 {
                 letter-spacing: 0;
                 color: var(--ink);
             }
+            div[data-testid="stHeader"] {
+                background: rgba(247, 246, 241, 0.86);
+                backdrop-filter: blur(14px);
+                border-bottom: 1px solid rgba(222, 216, 199, 0.72);
+            }
+            div[data-testid="stTopNav"] {
+                background: rgba(247, 246, 241, 0.80);
+                border-bottom: 1px solid rgba(222, 216, 199, 0.72);
+                backdrop-filter: blur(16px);
+            }
+            div[data-testid="stTopNav"] a {
+                border-radius: 999px;
+                font-weight: 700;
+                color: var(--muted);
+            }
+            div[data-testid="stTopNav"] a:hover {
+                color: var(--ink);
+                background: rgba(15, 118, 110, 0.08);
+            }
             div[data-testid="stSidebar"] {
-                background: #f8fafc;
-                border-right: 1px solid #e2e8f0;
+                background: #f3f0e8;
+                border-right: 1px solid var(--line);
             }
             div[data-testid="stMetric"] {
-                background: rgba(255, 255, 255, 0.86);
-                border: 1px solid #dbe3ef;
+                background: var(--panel);
+                border: 1px solid rgba(222, 216, 199, 0.94);
                 border-radius: 8px;
                 padding: 1rem 1.1rem;
                 min-height: 136px;
                 height: 100%;
-                box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+                box-shadow: var(--shadow);
             }
             div[data-testid="stMetric"] label {
                 min-height: 2.65rem;
@@ -61,24 +106,26 @@ def inject_global_styles() -> None:
             .hero {
                 position: relative;
                 overflow: hidden;
-                border: 1px solid rgba(148, 163, 184, 0.34);
+                border: 1px solid rgba(222, 216, 199, 0.95);
                 border-radius: 8px;
-                padding: 2.6rem;
+                padding: 2.8rem;
                 background:
-                    linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(15, 118, 110, 0.10) 54%, rgba(190, 24, 93, 0.07)),
-                    #ffffff;
-                box-shadow: 0 24px 60px rgba(15, 23, 42, 0.09);
-                margin-bottom: 1.2rem;
+                    linear-gradient(135deg, rgba(255, 253, 247, 0.98), rgba(238, 233, 221, 0.88)),
+                    #fffdf7;
+                box-shadow: 0 28px 72px rgba(34, 45, 38, 0.12);
+                margin-bottom: 1.35rem;
             }
             .hero::after {
                 content: "";
                 position: absolute;
-                right: -5rem;
-                top: -7rem;
-                width: 22rem;
-                height: 22rem;
-                background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(15, 118, 110, 0.08));
-                transform: rotate(18deg);
+                right: -3rem;
+                top: 0;
+                width: 24rem;
+                height: 100%;
+                background:
+                    linear-gradient(135deg, rgba(15, 118, 110, 0.18), rgba(124, 58, 237, 0.10)),
+                    repeating-linear-gradient(135deg, rgba(23, 33, 27, 0.08) 0 1px, transparent 1px 14px);
+                transform: skewX(-12deg);
                 border-radius: 8px;
             }
             .hero h1 {
@@ -100,7 +147,7 @@ def inject_global_styles() -> None:
             .eyebrow {
                 position: relative;
                 z-index: 1;
-                color: var(--blue);
+                color: var(--accent);
                 font-size: 0.78rem;
                 font-weight: 700;
                 letter-spacing: 0.08em;
@@ -108,9 +155,9 @@ def inject_global_styles() -> None:
                 text-transform: uppercase;
             }
             .notice {
-                border: 1px solid #dbeafe;
-                border-left: 4px solid var(--blue);
-                background: rgba(239, 246, 255, 0.78);
+                border: 1px solid rgba(15, 118, 110, 0.22);
+                border-left: 4px solid var(--accent);
+                background: rgba(236, 253, 245, 0.62);
                 color: #334155;
                 padding: 0.9rem 1rem;
                 margin: 0.75rem 0 1.25rem 0;
@@ -119,8 +166,8 @@ def inject_global_styles() -> None:
             .portfolio-card, .stat-card, .contact-card, .insight-card {
                 border: 1px solid var(--line);
                 border-radius: 8px;
-                background: rgba(255, 255, 255, 0.92);
-                box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+                background: var(--panel);
+                box-shadow: var(--shadow);
             }
             .portfolio-card {
                 height: 282px;
@@ -130,8 +177,8 @@ def inject_global_styles() -> None:
                 transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
             }
             .portfolio-card:hover, .stat-card:hover {
-                border-color: #bfdbfe;
-                box-shadow: 0 18px 40px rgba(37, 99, 235, 0.10);
+                border-color: rgba(15, 118, 110, 0.34);
+                box-shadow: 0 22px 50px rgba(15, 118, 110, 0.12);
                 transform: translateY(-2px);
             }
             .portfolio-card h3 {
@@ -149,10 +196,10 @@ def inject_global_styles() -> None:
             }
             .status-pill {
                 display: inline-block;
-                border: 1px solid #bfdbfe;
+                border: 1px solid rgba(15, 118, 110, 0.25);
                 border-radius: 999px;
-                color: #1d4ed8;
-                background: #eff6ff;
+                color: #0f766e;
+                background: rgba(236, 253, 245, 0.78);
                 font-size: 0.76rem;
                 font-weight: 700;
                 padding: 0.18rem 0.55rem;
@@ -181,26 +228,26 @@ def inject_global_styles() -> None:
                 align-content: center;
             }
             .contact-card a {
-                color: #1d4ed8;
+                color: var(--accent);
                 font-weight: 650;
                 text-decoration: none;
                 border-bottom: 1px solid transparent;
                 width: fit-content;
             }
             .contact-card a:hover {
-                border-bottom-color: #93c5fd;
+                border-bottom-color: rgba(15, 118, 110, 0.44);
             }
             .insight-card {
                 padding: 1rem;
                 margin-top: 0.5rem;
-                border-left: 4px solid var(--teal);
+                border-left: 4px solid var(--accent);
             }
             .placeholder-panel {
-                border: 1px dashed #94a3b8;
+                border: 1px dashed #b7ad97;
                 border-radius: 8px;
                 background:
-                    linear-gradient(135deg, rgba(37, 99, 235, 0.07), rgba(15, 118, 110, 0.06)),
-                    rgba(255, 255, 255, 0.86);
+                    linear-gradient(135deg, rgba(15, 118, 110, 0.07), rgba(183, 121, 31, 0.08)),
+                    rgba(255, 253, 247, 0.86);
                 padding: 2.1rem;
                 min-height: 260px;
                 box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.72);
@@ -211,17 +258,18 @@ def inject_global_styles() -> None:
             .section-band {
                 border: 1px solid var(--line);
                 border-radius: 8px;
-                background: rgba(255, 255, 255, 0.78);
+                background: rgba(255, 253, 247, 0.82);
                 padding: 1.2rem;
                 min-height: 100%;
+                box-shadow: 0 14px 34px rgba(34, 45, 38, 0.06);
             }
             .welcome-grid-card {
                 height: 300px;
                 border: 1px solid var(--line);
                 border-radius: 8px;
-                background: rgba(255, 255, 255, 0.94);
+                background: var(--panel);
                 padding: 1.2rem;
-                box-shadow: 0 16px 38px rgba(15, 23, 42, 0.07);
+                box-shadow: var(--shadow);
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
@@ -229,8 +277,8 @@ def inject_global_styles() -> None:
             }
             .welcome-grid-card:hover {
                 transform: translateY(-2px);
-                border-color: #bfdbfe;
-                box-shadow: 0 20px 44px rgba(37, 99, 235, 0.11);
+                border-color: rgba(15, 118, 110, 0.34);
+                box-shadow: 0 22px 50px rgba(15, 118, 110, 0.12);
             }
             .welcome-icon {
                 width: 2.45rem;
@@ -238,7 +286,7 @@ def inject_global_styles() -> None:
                 display: grid;
                 place-items: center;
                 border-radius: 8px;
-                background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(15, 118, 110, 0.12));
+                background: linear-gradient(135deg, rgba(15, 118, 110, 0.14), rgba(183, 121, 31, 0.12));
                 font-size: 1.35rem;
                 margin-bottom: 0.9rem;
             }
@@ -256,11 +304,23 @@ def inject_global_styles() -> None:
                 margin: 0;
             }
             .method-note {
-                border: 1px solid #dbeafe;
+                border: 1px solid rgba(15, 118, 110, 0.22);
                 border-radius: 8px;
-                background: rgba(239, 246, 255, 0.78);
+                background: rgba(236, 253, 245, 0.58);
                 padding: 1rem;
                 color: #334155;
+            }
+            div[data-testid="stExpander"] {
+                border-color: var(--line);
+                background: rgba(255, 253, 247, 0.76);
+                box-shadow: 0 12px 30px rgba(34, 45, 38, 0.05);
+            }
+            div[data-testid="stPlotlyChart"] {
+                border: 1px solid rgba(222, 216, 199, 0.72);
+                border-radius: 8px;
+                background: rgba(255, 253, 247, 0.80);
+                padding: 0.35rem;
+                box-shadow: 0 14px 34px rgba(34, 45, 38, 0.06);
             }
             @media (max-width: 760px) {
                 .hero {
