@@ -1,0 +1,12 @@
+name: career-site
+channels:
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - streamlit
+      - numpy
+      - pandas
+      - plotly
+      - scikit-learn
