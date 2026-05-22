@@ -27,7 +27,7 @@ top_cols = st.columns([1.15, 0.85], gap="medium")
 with top_cols[0]:
     st.markdown(
         """
-        <div class="section-band">
+        <div class="section-band intro-pair-card">
             <h3>Technical focus</h3>
             <p>
                 The purpose of this app is to demonstrate applied data science work in
@@ -41,7 +41,7 @@ with top_cols[0]:
 with top_cols[1]:
     st.markdown(
         """
-        <div class="contact-card">
+        <div class="contact-card intro-pair-card">
             <a href="https://www.linkedin.com/in/codyxu94/" target="_blank">LinkedIn: codyxu94</a>
             <a href="https://github.com/Coding-Cody" target="_blank">GitHub: Coding-Cody</a>
             <a href="mailto:codyxu94@gmail.com">codyxu94@gmail.com</a>

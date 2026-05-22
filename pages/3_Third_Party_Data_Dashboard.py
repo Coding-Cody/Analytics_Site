@@ -28,7 +28,7 @@ left, right = st.columns(2, gap="small")
 with left:
     st.markdown(
         """
-        <div class="placeholder-panel">
+        <div class="placeholder-panel paired-card">
             <h3>Planned dashboard space</h3>
             <p>
                 The future build can include source selectors, market filters, KPI cards,
@@ -44,7 +44,7 @@ with left:
 with right:
     st.markdown(
         """
-        <div class="section-band">
+        <div class="section-band paired-card">
             <h3>Design intent</h3>
             <p>
                 A quiet professional dashboard with dense but readable information,

@@ -6,7 +6,7 @@ import plotly.express as px
 import streamlit as st
 
 from utils.data import load_geo_test_data, load_synthetic_control_data
-from utils.ui import inject_global_styles, render_insight
+from utils.ui import inject_global_styles, render_insight, render_kpi_card
 
 
 inject_global_styles()
@@ -96,17 +96,21 @@ if methodology == "Matched-market test":
     lift_pct = did_lift / test_pre
     residual_sigma = (
         group_df.pivot(index="week", columns="group", values="kpi")
-        .assign(gap=lambda x: x["Test markets"] - x["Matched controls"])["gap"]
+        .assign(difference=lambda x: x["Test markets"] - x["Matched controls"])["difference"]
         .std(ddof=1)
     )
     standard_error = residual_sigma / np.sqrt(12)
     t_stat = did_lift / standard_error
 
     metric_cols = st.columns(4)
-    metric_cols[0].metric("Pre-period fit", "2.8% gap")
-    metric_cols[1].metric("Difference-in-differences lift", f"{did_lift:,.0f}")
-    metric_cols[2].metric("Lift rate", f"{lift_pct:.1%}")
-    metric_cols[3].metric("t-statistic", f"{t_stat:.2f}")
+    with metric_cols[0]:
+        render_kpi_card("Pre-period fit", "2.8%", "Avg pre-period difference")
+    with metric_cols[1]:
+        render_kpi_card("DiD lift", f"{did_lift:,.0f}", "Incremental KPI index")
+    with metric_cols[2]:
+        render_kpi_card("Lift rate", f"{lift_pct:.1%}", "Relative to pre-period test baseline")
+    with metric_cols[3]:
+        render_kpi_card("t-statistic", f"{t_stat:.2f}", "Signal strength vs residual noise")
 
     st.markdown(
         """
@@ -135,7 +139,7 @@ if methodology == "Matched-market test":
     fig.update_layout(hovermode="x unified")
     st.plotly_chart(fig, width="stretch")
     render_insight(
-        "The pre-period validates comparability before media activation. The post-period gap is interpreted through a difference-in-differences lens, not a simple before/after read."
+        "The pre-period validates comparability before media activation. The post-period difference is interpreted through a difference-in-differences lens, not a simple before/after read."
     )
 
     market_fig = px.box(
@@ -179,17 +183,21 @@ else:
     ci = 1.96 * post_lift.std(ddof=1) / np.sqrt(len(post_lift))
 
     metric_cols = st.columns(4)
-    metric_cols[0].metric("Pre-period avg gap", f"{pre_gap.mean():.1f}")
-    metric_cols[1].metric("Post-period avg lift", f"{post_lift.mean():.1f}")
-    metric_cols[2].metric("Approx. 95% CI", f"+/- {ci:.1f}")
-    metric_cols[3].metric("Pre-period RMSE", f"{np.sqrt(np.mean(pre_gap**2)):.1f}")
+    with metric_cols[0]:
+        render_kpi_card("Pre-period avg difference", f"{pre_gap.mean():.1f}", "Treated vs synthetic")
+    with metric_cols[1]:
+        render_kpi_card("Post-period avg lift", f"{post_lift.mean():.1f}", "Estimated treatment effect")
+    with metric_cols[2]:
+        render_kpi_card("Approx. 95% CI", f"+/- {ci:.1f}", "Sampling uncertainty")
+    with metric_cols[3]:
+        render_kpi_card("Pre-period RMSE", f"{np.sqrt(np.mean(pre_gap**2)):.1f}", "Counterfactual fit")
 
     st.markdown(
         """
         <div class="method-note">
             <strong>Synthetic-control read:</strong> evaluate the pre-period fit first.
             A low pre-period RMSE means the counterfactual tracks the treated geography
-            before media launch. The post-period gap is then interpreted as a treatment
+            before media launch. The post-period difference is then interpreted as a treatment
             effect, with placebo tests or market-level permutation checks used in a full
             production analysis.
         </div>

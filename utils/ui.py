@@ -265,14 +265,22 @@ def inject_global_styles() -> None:
                 box-shadow: 0 14px 34px rgba(34, 45, 38, 0.06);
             }
             .paired-card {
-                min-height: 286px;
+                box-sizing: border-box;
+                height: 318px;
+                overflow: hidden;
+            }
+            .intro-pair-card {
+                box-sizing: border-box;
+                height: 210px;
+                overflow: hidden;
             }
             .market-card {
                 border: 1px solid var(--line);
                 border-radius: 8px;
                 background: rgba(255, 253, 247, 0.82);
                 padding: 1.2rem;
-                min-height: 286px;
+                box-sizing: border-box;
+                height: 318px;
                 box-shadow: 0 14px 34px rgba(34, 45, 38, 0.06);
             }
             .market-card h3 {
@@ -300,6 +308,40 @@ def inject_global_styles() -> None:
                 font-size: 0.84rem;
                 font-weight: 650;
                 padding: 0.32rem 0.62rem;
+            }
+            .kpi-card {
+                border: 1px solid rgba(222, 216, 199, 0.94);
+                border-radius: 8px;
+                background: var(--panel);
+                box-shadow: var(--shadow);
+                min-height: 138px;
+                padding: 1rem 1.05rem;
+                margin-top: 0.8rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+            .kpi-label {
+                color: var(--muted);
+                font-size: 0.78rem;
+                font-weight: 760;
+                letter-spacing: 0.04em;
+                line-height: 1.25;
+                min-height: 2rem;
+                text-transform: uppercase;
+            }
+            .kpi-value {
+                color: var(--ink);
+                font-size: 1.75rem;
+                font-weight: 780;
+                line-height: 1.12;
+                margin: 0.2rem 0 0.35rem 0;
+            }
+            .kpi-detail {
+                color: var(--muted);
+                font-size: 0.84rem;
+                line-height: 1.35;
+                min-height: 2.25rem;
             }
             .welcome-grid-card {
                 height: 300px;
@@ -419,6 +461,19 @@ def render_welcome_card(icon: str, title: str, body: str) -> None:
                 <h3>{html.escape(title)}</h3>
                 <p>{html.escape(body)}</p>
             </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_kpi_card(label: str, value: str, detail: str = "") -> None:
+    st.markdown(
+        f"""
+        <div class="kpi-card">
+            <div class="kpi-label">{html.escape(label)}</div>
+            <div class="kpi-value">{html.escape(value)}</div>
+            <div class="kpi-detail">{html.escape(detail)}</div>
         </div>
         """,
         unsafe_allow_html=True,

@@ -4,7 +4,7 @@ import plotly.express as px
 import streamlit as st
 
 from utils.data import CHANNELS, load_mmm_case_data, load_response_curve_data, summarize_channels
-from utils.ui import inject_global_styles, render_insight
+from utils.ui import inject_global_styles, render_insight, render_kpi_card
 
 
 inject_global_styles()
@@ -113,10 +113,18 @@ with right:
     )
 
 metric_cols = st.columns(4)
-metric_cols[0].metric("Selected Spend", f"${filtered['spend'].sum():,.0f}")
-metric_cols[1].metric("Estimated Contribution", f"${filtered['contribution'].sum():,.0f}")
-metric_cols[2].metric("Average ROI", f"{summary['roi'].mean():.2f}x")
-metric_cols[3].metric("Mean Half-life", f"{summary['half_life'].mean():.1f} weeks")
+with metric_cols[0]:
+    render_kpi_card("Selected spend", f"${filtered['spend'].sum():,.0f}", "Filtered media investment")
+with metric_cols[1]:
+    render_kpi_card(
+        "Estimated contribution",
+        f"${filtered['contribution'].sum():,.0f}",
+        "Model-attributed KPI impact",
+    )
+with metric_cols[2]:
+    render_kpi_card("Average ROI", f"{summary['roi'].mean():.2f}x", "Mean channel efficiency")
+with metric_cols[3]:
+    render_kpi_card("Mean half-life", f"{summary['half_life'].mean():.1f} weeks", "Carryover duration")
 
 st.markdown(
     """
@@ -203,9 +211,12 @@ st.divider()
 st.subheader("Ad-stock and Saturation Diagnostics")
 
 diagnostic_cols = st.columns(3)
-diagnostic_cols[0].metric("Ad-stock parameter", "Half-life", "channel-specific")
-diagnostic_cols[1].metric("Hill alpha", "1.00-1.35", "curve steepness")
-diagnostic_cols[2].metric("Hill ec50", "$52K-$145K", "half-max response")
+with diagnostic_cols[0]:
+    render_kpi_card("Ad-stock parameter", "Half-life", "Channel-specific memory")
+with diagnostic_cols[1]:
+    render_kpi_card("Hill alpha", "1.00-1.35", "Response curve steepness")
+with diagnostic_cols[2]:
+    render_kpi_card("Hill ec50", "$52K-$145K", "Half-maximum response")
 
 adstock_fig = px.line(
     filtered,
@@ -267,12 +278,16 @@ scenario["incremental_spend"] = scenario["scenario_spend"] - scenario["current_s
 scenario["estimated_incremental_contribution"] = scenario["incremental_spend"] * scenario["roi"]
 
 scenario_cols = st.columns(3)
-scenario_cols[0].metric("Scenario Spend", f"${scenario['scenario_spend'].sum():,.0f}", f"{budget_change:+d}%")
-scenario_cols[1].metric(
-    "Est. Incremental Contribution",
-    f"${scenario['estimated_incremental_contribution'].sum():,.0f}",
-)
-scenario_cols[2].metric("Channels Evaluated", f"{len(scenario)}")
+with scenario_cols[0]:
+    render_kpi_card("Scenario spend", f"${scenario['scenario_spend'].sum():,.0f}", f"{budget_change:+d}% vs current")
+with scenario_cols[1]:
+    render_kpi_card(
+        "Incremental contribution",
+        f"${scenario['estimated_incremental_contribution'].sum():,.0f}",
+        "Scenario-level estimate",
+    )
+with scenario_cols[2]:
+    render_kpi_card("Channels evaluated", f"{len(scenario)}", "Selected media channels")
 
 scenario_fig = px.bar(
     scenario.sort_values("estimated_incremental_contribution", ascending=False),

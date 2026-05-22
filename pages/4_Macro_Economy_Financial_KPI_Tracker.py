@@ -4,7 +4,7 @@ import plotly.express as px
 import streamlit as st
 
 from utils.data import load_macro_kpi_data
-from utils.ui import inject_global_styles, render_insight
+from utils.ui import inject_global_styles, render_insight, render_kpi_card
 
 
 inject_global_styles()
@@ -47,12 +47,13 @@ st.subheader("Executive KPI Snapshot")
 for chunk_start in range(0, len(filtered_cards), 3):
     cols = st.columns(3)
     for col, (_, row) in zip(cols, filtered_cards.iloc[chunk_start : chunk_start + 3].iterrows()):
-        col.metric(
-            f"{row['region']} | {row['indicator']}",
-            f"{row['value']:.2f}{row['unit'] if row['unit'].startswith('%') else ' ' + row['unit']}",
-            row["period"],
-        )
-        col.caption(f"{row['status']} | {row['source']}")
+        with col:
+            value = f"{row['value']:.2f}{row['unit'] if row['unit'].startswith('%') else ' ' + row['unit']}"
+            render_kpi_card(
+                f"{row['region']} | {row['indicator']}",
+                value,
+                f"{row['period']} | {row['status']}",
+            )
 
 st.divider()
 
@@ -106,7 +107,7 @@ with left:
 with right:
     st.markdown(
         """
-        <div class="section-band">
+        <div class="section-band paired-card">
             <h3>Monitoring logic</h3>
             <p>
                 The tracker is organized around signals that matter for planning:
