@@ -314,12 +314,14 @@ def inject_global_styles() -> None:
                 border-radius: 8px;
                 background: var(--panel);
                 box-shadow: var(--shadow);
-                min-height: 138px;
+                box-sizing: border-box;
+                height: 158px;
                 padding: 1rem 1.05rem;
                 margin-top: 0.8rem;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
+                overflow: hidden;
             }
             .kpi-label {
                 color: var(--muted);

@@ -23,32 +23,19 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-top_cols = st.columns([1.15, 0.85], gap="medium")
-with top_cols[0]:
-    st.markdown(
-        """
-        <div class="section-band intro-pair-card">
-            <h3>Technical focus</h3>
-            <p>
-                The purpose of this app is to demonstrate applied data science work in
-                a structured way: measurement design, model interpretation, dashboard
-                logic, KPI monitoring, and the statistical assumptions behind each view.
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-with top_cols[1]:
-    st.markdown(
-        """
-        <div class="contact-card intro-pair-card">
-            <a href="https://www.linkedin.com/in/codyxu94/" target="_blank">LinkedIn: codyxu94</a>
-            <a href="https://github.com/Coding-Cody" target="_blank">GitHub: Coding-Cody</a>
-            <a href="mailto:codyxu94@gmail.com">codyxu94@gmail.com</a>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+st.markdown(
+    """
+    <div class="section-band">
+        <h3>Technical focus</h3>
+        <p>
+            The purpose of this app is to demonstrate applied data science work in
+            a structured way: measurement design, model interpretation, dashboard
+            logic, KPI monitoring, and the statistical assumptions behind each view.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 st.subheader("Focus Areas")
 focus_cols = st.columns(4)
@@ -73,14 +60,14 @@ st.subheader("Featured Sections")
 card_cols = st.columns(4)
 projects = [
     {
-        "title": "Geo-based Incrementality Test",
-        "status": "Case study",
-        "body": "Matched-market and synthetic-control views for market-level lift, pre-period fit, DiD estimation, and causal validity.",
-    },
-    {
         "title": "Marketing Mix Modelling",
         "status": "Deep dive",
         "body": "Bayesian MMM concepts with hierarchical pooling, ad-stock carryover, Hill saturation, marginal returns, and planning.",
+    },
+    {
+        "title": "Geo-based Incrementality Test",
+        "status": "Case study",
+        "body": "Matched-market and synthetic-control views for market-level lift, pre-period fit, DiD estimation, and causal validity.",
     },
     {
         "title": "Third-party Data Dashboard",
@@ -97,4 +84,18 @@ projects = [
 for col, project in zip(card_cols, projects):
     with col:
         render_project_card(project["title"], project["status"], project["body"])
+
+st.divider()
+
+st.markdown(
+    """
+    <div class="contact-card">
+        <strong>Contact</strong>
+        <a href="https://www.linkedin.com/in/codyxu94/" target="_blank">LinkedIn: codyxu94</a>
+        <a href="https://github.com/Coding-Cody" target="_blank">GitHub: Coding-Cody</a>
+        <a href="mailto:codyxu94@gmail.com">codyxu94@gmail.com</a>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 

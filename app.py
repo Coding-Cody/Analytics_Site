@@ -17,14 +17,14 @@ inject_global_styles()
 pages = [
     st.Page("pages/0_App_Introduction.py", title="App Introduction", icon=":material/home:"),
     st.Page(
-        "pages/1_Geo_Based_Incrementality_Test.py",
-        title="Geo-based Incrementality Test",
-        icon=":material/map:",
-    ),
-    st.Page(
         "pages/2_Marketing_Mix_Modelling_Google_Meridian.py",
         title="Marketing Mix Modelling",
         icon=":material/analytics:",
+    ),
+    st.Page(
+        "pages/1_Geo_Based_Incrementality_Test.py",
+        title="Geo-based Incrementality Test",
+        icon=":material/map:",
     ),
     st.Page(
         "pages/3_Third_Party_Data_Dashboard.py",
