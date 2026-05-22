@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import streamlit as st
 
-from utils.ui import inject_global_styles, render_focus_card, render_project_card
+from utils.ui import inject_global_styles, render_contact_card, render_focus_card, render_project_card
 
 
 inject_global_styles()
@@ -87,15 +89,5 @@ for col, project in zip(card_cols, projects):
 
 st.divider()
 
-st.markdown(
-    """
-    <div class="contact-card">
-        <strong>Contact</strong>
-        <a href="https://www.linkedin.com/in/codyxu94/" target="_blank">LinkedIn: codyxu94</a>
-        <a href="https://github.com/Coding-Cody" target="_blank">GitHub: Coding-Cody</a>
-        <a href="mailto:codyxu94@gmail.com">codyxu94@gmail.com</a>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+render_contact_card(Path(__file__).resolve().parents[1] / "Cody.JPG")
 

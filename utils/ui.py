@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import base64
 import html
+from pathlib import Path
 
 import plotly.io as pio
 import streamlit as st
@@ -329,19 +331,59 @@ def inject_global_styles() -> None:
             }
             .contact-card {
                 display: grid;
-                gap: 0.75rem;
-                padding: 1.1rem;
-                min-height: 146px;
-                align-content: center;
+                grid-template-columns: auto 1fr auto;
+                gap: 1.25rem;
+                align-items: center;
+                padding: 1.2rem;
+                min-height: 156px;
+                overflow: hidden;
             }
-            .contact-card a {
+            .contact-avatar-wrap {
+                position: relative;
+                width: 7rem;
+                height: 7rem;
+                border-radius: 999px;
+                padding: 0.25rem;
+                background:
+                    linear-gradient(135deg, rgba(20, 184, 166, 0.95), rgba(208, 138, 29, 0.82));
+                box-shadow: 0 18px 44px rgba(20, 26, 22, 0.18);
+            }
+            .contact-avatar {
+                width: 100%;
+                height: 100%;
+                border-radius: 999px;
+                object-fit: cover;
+                object-position: center;
+                border: 3px solid rgba(255, 250, 240, 0.96);
+                display: block;
+            }
+            .contact-copy strong {
+                display: block;
+                color: var(--ink);
+                font-size: 1.22rem;
+                line-height: 1.2;
+                margin-bottom: 0.35rem;
+            }
+            .contact-copy p {
+                color: var(--muted);
+                line-height: 1.55;
+                margin: 0;
+                max-width: 650px;
+            }
+            .contact-links {
+                display: grid;
+                gap: 0.58rem;
+                justify-items: start;
+                min-width: 13rem;
+            }
+            .contact-links a {
                 color: var(--accent);
                 font-weight: 650;
                 text-decoration: none;
                 border-bottom: 1px solid transparent;
                 width: fit-content;
             }
-            .contact-card a:hover {
+            .contact-links a:hover {
                 border-bottom-color: rgba(15, 118, 110, 0.44);
             }
             .insight-card {
@@ -520,6 +562,13 @@ def inject_global_styles() -> None:
                 .hero h1 {
                     font-size: 2.1rem;
                 }
+                .contact-card {
+                    grid-template-columns: 1fr;
+                    justify-items: start;
+                }
+                .contact-links {
+                    min-width: 0;
+                }
             }
         </style>
         """,
@@ -611,6 +660,39 @@ def render_kpi_card(label: str, value: str, detail: str = "") -> None:
             <div class="kpi-label">{html.escape(label)}</div>
             <div class="kpi-value">{html.escape(value)}</div>
             <div class="kpi-detail">{html.escape(detail)}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_contact_card(image_path: str | Path) -> None:
+    image = Path(image_path)
+    image_markup = ""
+    if image.exists():
+        encoded = base64.b64encode(image.read_bytes()).decode("ascii")
+        image_markup = (
+            f'<div class="contact-avatar-wrap">'
+            f'<img class="contact-avatar" src="data:image/jpeg;base64,{encoded}" alt="Cody Xu" />'
+            f"</div>"
+        )
+
+    st.markdown(
+        f"""
+        <div class="contact-card">
+            {image_markup}
+            <div class="contact-copy">
+                <strong>Cody Xu</strong>
+                <p>
+                    Senior data scientist focused on marketing analytics, causal
+                    measurement, dashboard systems, and decision science.
+                </p>
+            </div>
+            <div class="contact-links">
+                <a href="https://www.linkedin.com/in/codyxu94/" target="_blank">LinkedIn: codyxu94</a>
+                <a href="https://github.com/Coding-Cody" target="_blank">GitHub: Coding-Cody</a>
+                <a href="mailto:codyxu94@gmail.com">codyxu94@gmail.com</a>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
