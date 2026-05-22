@@ -221,6 +221,62 @@ def inject_global_styles() -> None:
                 min-height: 2.5rem;
                 margin-bottom: 0.3rem;
             }
+            .focus-card {
+                border: 1px solid var(--line);
+                border-radius: 8px;
+                background:
+                    linear-gradient(135deg, rgba(255, 253, 247, 0.96), rgba(239, 235, 224, 0.78)),
+                    var(--panel);
+                box-shadow: var(--shadow);
+                box-sizing: border-box;
+                height: 188px;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                display: flex;
+                gap: 0.85rem;
+                align-items: flex-start;
+                transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+                overflow: hidden;
+            }
+            .focus-card:hover {
+                border-color: rgba(15, 118, 110, 0.34);
+                box-shadow: 0 22px 50px rgba(15, 118, 110, 0.12);
+                transform: translateY(-2px);
+            }
+            .focus-icon {
+                flex: 0 0 auto;
+                width: 2.45rem;
+                height: 2.45rem;
+                border-radius: 8px;
+                display: grid;
+                place-items: center;
+                background: rgba(15, 118, 110, 0.10);
+                border: 1px solid rgba(15, 118, 110, 0.16);
+                color: var(--accent);
+            }
+            .focus-icon svg {
+                width: 1.35rem;
+                height: 1.35rem;
+                stroke: currentColor;
+                stroke-width: 2;
+                fill: none;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+            .focus-copy strong {
+                display: block;
+                color: var(--ink);
+                font-size: 0.98rem;
+                line-height: 1.25;
+                min-height: 2.5rem;
+                margin-bottom: 0.35rem;
+            }
+            .focus-copy p {
+                color: var(--muted);
+                line-height: 1.48;
+                margin: 0;
+                font-size: 0.92rem;
+            }
             .contact-card {
                 display: grid;
                 gap: 0.75rem;
@@ -437,6 +493,32 @@ def render_stat_card(title: str, body: str) -> None:
         <div class="stat-card">
             <strong>{html.escape(title)}</strong>
             <p>{html.escape(body)}</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_focus_card(icon: str, title: str, body: str) -> None:
+    icons = {
+        "target": '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>',
+        "map": '<svg viewBox="0 0 24 24"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"></path><path d="M9 3v15"></path><path d="M15 6v15"></path></svg>',
+        "curve": '<svg viewBox="0 0 24 24"><path d="M4 19h16"></path><path d="M4 19c5-1 6-13 10-13 2.8 0 3.5 5 6 5"></path><path d="M15 6h5v5"></path></svg>',
+        "dashboard": '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M9 10v10"></path><path d="M13 15h4"></path></svg>',
+        "forecast": '<svg viewBox="0 0 24 24"><path d="M4 18l5-5 4 3 7-9"></path><path d="M15 7h5v5"></path><path d="M4 6v12h16"></path></svg>',
+        "experiment": '<svg viewBox="0 0 24 24"><path d="M9 3h6"></path><path d="M10 3v5l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 17l-5-9V3"></path><path d="M7 16h10"></path></svg>',
+        "database": '<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></svg>',
+        "globe": '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.2 2.4 3.2 5.4 3.2 9S14.2 18.6 12 21"></path><path d="M12 3C9.8 5.4 8.8 8.4 8.8 12S9.8 18.6 12 21"></path></svg>',
+    }
+    icon_markup = icons.get(icon, html.escape(icon))
+    st.markdown(
+        f"""
+        <div class="focus-card">
+            <div class="focus-icon">{icon_markup}</div>
+            <div class="focus-copy">
+                <strong>{html.escape(title)}</strong>
+                <p>{html.escape(body)}</p>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from utils.ui import inject_global_styles, render_project_card, render_stat_card
+from utils.ui import inject_global_styles, render_focus_card, render_project_card
 
 
 inject_global_styles()
@@ -40,19 +40,19 @@ st.markdown(
 st.subheader("Focus Areas")
 focus_cols = st.columns(4)
 focus_items = [
-    ("Marketing Analytics", "Channel impact, incrementality, ROI, and budget allocation."),
-    ("Geo Experimentation", "Matched-market design, synthetic controls, DiD, and lift inference."),
-    ("MMM", "Bayesian hierarchy, ad-stock, Hill saturation, priors, and posteriors."),
-    ("Dashboarding", "Executive-ready Streamlit and Plotly decision surfaces."),
-    ("Forecasting", "Trend, seasonality, decomposition, and scenario monitoring."),
-    ("Experimentation", "Power, uncertainty, lift, confidence intervals, and validity checks."),
-    ("Python + SQL", "Pipelines, analytical marts, feature shaping, and repeatable reporting."),
-    ("Financial KPIs", "Macro signals, rate context, z-scores, and KPI monitoring."),
+    ("target", "Marketing Analytics", "Channel impact, incrementality, ROI, and budget allocation."),
+    ("map", "Geo Experimentation", "Matched-market design, synthetic controls, DiD, and lift inference."),
+    ("curve", "MMM", "Bayesian hierarchy, ad-stock, Hill saturation, priors, and posteriors."),
+    ("dashboard", "Dashboarding", "Executive-ready Streamlit and Plotly decision surfaces."),
+    ("forecast", "Forecasting", "Trend, seasonality, decomposition, and scenario monitoring."),
+    ("experiment", "Experimentation", "Power, uncertainty, lift, confidence intervals, and validity checks."),
+    ("database", "Python + SQL", "Pipelines, analytical marts, feature shaping, and repeatable reporting."),
+    ("globe", "Financial KPIs", "Macro signals, rate context, z-scores, and KPI monitoring."),
 ]
 
 for index, item in enumerate(focus_items):
     with focus_cols[index % 4]:
-        render_stat_card(item[0], item[1])
+        render_focus_card(item[0], item[1], item[2])
 
 st.divider()
 
