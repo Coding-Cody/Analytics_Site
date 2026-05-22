@@ -9,6 +9,14 @@ from utils.ui import inject_global_styles, render_insight, render_kpi_card
 
 inject_global_styles()
 
+SOFT_CHANNEL_COLORS = {
+    "Paid Search": "#8ecac0",
+    "Paid Social": "#d8a9be",
+    "YouTube": "#e7bd82",
+    "Display": "#a9cfa9",
+    "TV": "#b7add7",
+}
+
 st.markdown(
     """
     <section class="hero">
@@ -153,6 +161,7 @@ spend_fig = px.area(
     labels={"week": "Week", "spend": "Spend", "channel": "Channel"},
 )
 spend_fig.update_layout(hovermode="x unified", legend_title_text="Channel")
+spend_fig.update_traces(opacity=0.78, line_width=1.1)
 st.plotly_chart(spend_fig, width="stretch")
 render_insight(
     "Spend pacing is the operational input. MMM interpretation begins after spend is transformed into ad-stocked media pressure and then mapped through a nonlinear Hill response curve."
@@ -165,8 +174,10 @@ kpi_fig = px.line(
     markers=True,
     title="KPI and Estimated Media Contribution Over Time",
     labels={"week": "Week", "value": "KPI / contribution", "variable": "Series"},
+    color_discrete_map={"kpi_sales": "#141a16", "contribution": "#0f766e"},
 )
 kpi_fig.update_layout(hovermode="x unified")
+kpi_fig.update_traces(line_width=2.8, marker_size=6)
 st.plotly_chart(kpi_fig, width="stretch")
 render_insight(
     "The KPI view combines baseline demand and media-driven contribution. A useful MMM read asks whether posterior contribution moves plausibly with transformed media pressure, not raw spend alone."
@@ -179,12 +190,13 @@ with left_chart:
         x="channel",
         y="contribution",
         color="channel",
-        color_discrete_map={channel: details["color"] for channel, details in CHANNELS.items()},
+        color_discrete_map=SOFT_CHANNEL_COLORS,
         title="Channel Contribution",
         labels={"channel": "Channel", "contribution": "Estimated Contribution"},
         text_auto=".2s",
     )
     contribution_fig.update_layout(showlegend=False)
+    contribution_fig.update_traces(marker_line_width=0, opacity=0.88, textfont_color="#4f5b53")
     st.plotly_chart(contribution_fig, width="stretch")
     render_insight(
         "Contribution ranks channels by estimated business impact after transformation, baseline adjustment, Bayesian shrinkage, and response modeling."
@@ -196,12 +208,13 @@ with right_chart:
         x="channel",
         y="roi",
         color="channel",
-        color_discrete_map={channel: details["color"] for channel, details in CHANNELS.items()},
+        color_discrete_map=SOFT_CHANNEL_COLORS,
         title="ROI / Effectiveness Comparison",
         labels={"channel": "Channel", "roi": "Average ROI"},
         text_auto=".2f",
     )
     roi_fig.update_layout(showlegend=False)
+    roi_fig.update_traces(marker_line_width=0, opacity=0.88, textfont_color="#4f5b53")
     st.plotly_chart(roi_fig, width="stretch")
     render_insight(
         "High ROI does not always mean higher budget. Saturation, scale, confidence, and business constraints determine the next dollar."
@@ -228,6 +241,7 @@ adstock_fig = px.line(
     labels={"week": "Week", "adstocked_spend": "Ad-stocked spend", "channel": "Channel"},
 )
 adstock_fig.update_layout(hovermode="x unified")
+adstock_fig.update_traces(line_width=2.5)
 st.plotly_chart(adstock_fig, width="stretch")
 render_insight(
     "Ad-stock captures memory: TV and YouTube retain influence longer, while search decays faster. This prevents the model from forcing all media impact into the week spend occurred."
@@ -248,6 +262,7 @@ with curve_col:
             "channel": "Channel",
         },
     )
+    curve_fig.update_traces(line_width=2.5)
     st.plotly_chart(curve_fig, width="stretch")
     render_insight(
         "Saturation curves show diminishing returns. The Hill function makes this explicit: alpha controls steepness and ec50 controls how quickly the channel reaches half of its maximum response."
@@ -263,6 +278,7 @@ with marginal_col:
         title="Marginal Return by Spend Level",
         labels={"weekly_spend": "Weekly spend", "marginal_return": "Marginal return"},
     )
+    marginal_fig.update_traces(line_width=2.5)
     st.plotly_chart(marginal_fig, width="stretch")
     render_insight(
         "Marginal return is the planning layer: channels with high average ROI may still be poor candidates for incremental budget if their posterior response curve is already near saturation."
@@ -299,6 +315,7 @@ scenario_fig = px.bar(
     labels={"channel": "Channel", "estimated_incremental_contribution": "Incremental contribution"},
 )
 scenario_fig.update_layout(showlegend=False)
+scenario_fig.update_traces(marker_line_width=0)
 st.plotly_chart(scenario_fig, width="stretch")
 render_insight(
     "A production optimizer would apply constraints, uncertainty intervals, minimum spend thresholds, and saturation-aware response functions before final recommendation."

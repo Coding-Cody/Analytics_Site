@@ -11,7 +11,7 @@ CHANNELS = {
         "half_life": 1.2,
         "alpha": 1.35,
         "ec50": 72_000,
-        "color": "#2563eb",
+        "color": "#0f766e",
         "response": "High intent demand capture with faster carryover decay.",
     },
     "Paid Social": {
@@ -20,7 +20,7 @@ CHANNELS = {
         "half_life": 2.0,
         "alpha": 1.20,
         "ec50": 64_000,
-        "color": "#db2777",
+        "color": "#6d5bd0",
         "response": "Efficient reach and consideration builder with medium carryover.",
     },
     "YouTube": {
@@ -29,7 +29,7 @@ CHANNELS = {
         "half_life": 3.4,
         "alpha": 1.10,
         "ec50": 78_000,
-        "color": "#f97316",
+        "color": "#b7791f",
         "response": "Upper-funnel video with delayed conversion effect.",
     },
     "Display": {
@@ -38,7 +38,7 @@ CHANNELS = {
         "half_life": 1.7,
         "alpha": 1.00,
         "ec50": 52_000,
-        "color": "#16a34a",
+        "color": "#64748b",
         "response": "Broad reach channel with modest marginal return.",
     },
     "TV": {
@@ -47,7 +47,7 @@ CHANNELS = {
         "half_life": 4.6,
         "alpha": 1.05,
         "ec50": 145_000,
-        "color": "#7c3aed",
+        "color": "#164e63",
         "response": "Scaled awareness channel with longer memory and slower decay.",
     },
 }

@@ -9,10 +9,10 @@ import streamlit as st
 def inject_global_styles() -> None:
     pio.templates["portfolio_premium"] = {
         "layout": {
-            "font": {"family": "Arial, sans-serif", "color": "#17211b"},
+            "font": {"family": "Arial, sans-serif", "color": "#141a16"},
             "paper_bgcolor": "rgba(255,253,247,0)",
-            "plot_bgcolor": "rgba(255,253,247,0.72)",
-            "colorway": ["#0f766e", "#7c3aed", "#b7791f", "#2563eb", "#be185d", "#475569"],
+            "plot_bgcolor": "rgba(255,250,240,0.82)",
+            "colorway": ["#14b8a6", "#7c3aed", "#d08a1d", "#2563eb", "#be185d", "#475569"],
             "xaxis": {
                 "gridcolor": "rgba(102,113,102,0.14)",
                 "linecolor": "rgba(102,113,102,0.20)",
@@ -25,7 +25,7 @@ def inject_global_styles() -> None:
             },
             "legend": {"orientation": "h", "y": 1.08, "x": 0},
             "margin": {"l": 32, "r": 24, "t": 72, "b": 48},
-            "title": {"font": {"size": 18, "color": "#17211b"}},
+            "title": {"font": {"size": 18, "color": "#141a16"}},
         }
     }
     pio.templates.default = "portfolio_premium"
@@ -34,62 +34,79 @@ def inject_global_styles() -> None:
         """
         <style>
             :root {
-                --ink: #17211b;
-                --muted: #667166;
-                --line: #ded8c7;
-                --soft: #f7f6f1;
-                --panel: rgba(255, 253, 247, 0.90);
-                --accent: #0f766e;
+                --ink: #141a16;
+                --deep: #101611;
+                --muted: #60695f;
+                --line: #d8cfbb;
+                --soft: #f4efe3;
+                --panel: rgba(255, 250, 240, 0.91);
+                --accent: #14b8a6;
                 --accent-2: #7c3aed;
-                --gold: #b7791f;
+                --gold: #d08a1d;
                 --rose: #be185d;
-                --shadow: 0 18px 48px rgba(34, 45, 38, 0.10);
+                --shadow: 0 18px 48px rgba(20, 26, 22, 0.13);
+                --shadow-strong: 0 28px 80px rgba(20, 26, 22, 0.20);
             }
             .stApp {
                 background:
-                    linear-gradient(180deg, #f7f6f1 0%, #f1eee6 45%, #fbfaf6 100%);
+                    linear-gradient(rgba(20, 26, 22, 0.025) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(20, 26, 22, 0.025) 1px, transparent 1px),
+                    linear-gradient(180deg, #f4efe3 0%, #eee6d6 45%, #fffaf0 100%);
+                background-size: 34px 34px, 34px 34px, auto;
             }
             .block-container {
-                padding-top: 1.35rem;
-                padding-bottom: 3rem;
+                padding-top: 1.05rem;
+                padding-bottom: 3.5rem;
                 max-width: 1260px;
             }
             h1, h2, h3 {
                 letter-spacing: 0;
                 color: var(--ink);
             }
+            h2, div[data-testid="stMarkdownContainer"] h2 {
+                margin-top: 2rem;
+                padding-top: 0.45rem;
+                border-top: 1px solid rgba(20, 26, 22, 0.10);
+            }
             div[data-testid="stHeader"] {
-                background: rgba(247, 246, 241, 0.86);
-                backdrop-filter: blur(14px);
-                border-bottom: 1px solid rgba(222, 216, 199, 0.72);
+                background: rgba(244, 239, 227, 0.72);
+                backdrop-filter: blur(18px);
+                border-bottom: 1px solid rgba(216, 207, 187, 0.62);
             }
             div[data-testid="stTopNav"] {
-                background: rgba(247, 246, 241, 0.80);
-                border-bottom: 1px solid rgba(222, 216, 199, 0.72);
-                backdrop-filter: blur(16px);
+                width: fit-content;
+                max-width: calc(100vw - 3rem);
+                margin: 0.55rem auto 0.4rem auto;
+                padding: 0.38rem;
+                border: 1px solid rgba(216, 207, 187, 0.88);
+                border-radius: 999px;
+                background: rgba(255, 250, 240, 0.78);
+                box-shadow: 0 16px 44px rgba(20, 26, 22, 0.12);
+                backdrop-filter: blur(18px);
             }
             div[data-testid="stTopNav"] a {
                 border-radius: 999px;
-                font-weight: 700;
+                font-weight: 760;
                 color: var(--muted);
+                padding-inline: 0.9rem;
             }
             div[data-testid="stTopNav"] a:hover {
                 color: var(--ink);
-                background: rgba(15, 118, 110, 0.08);
+                background: rgba(20, 184, 166, 0.10);
             }
             div[data-testid="stSidebar"] {
-                background: #f3f0e8;
+                background: #eee6d6;
                 border-right: 1px solid var(--line);
             }
             div[data-testid="stMetric"] {
-                background: var(--panel);
+                background: rgba(255, 250, 240, 0.94);
                 border: 1px solid rgba(222, 216, 199, 0.94);
                 border-radius: 8px;
                 padding: 1rem 1.1rem;
                 margin-top: 0.65rem;
                 min-height: 136px;
                 height: 100%;
-                box-shadow: var(--shadow);
+                box-shadow: 0 14px 40px rgba(20, 26, 22, 0.10);
             }
             div[data-testid="stMetric"] label {
                 min-height: 2.65rem;
@@ -109,23 +126,32 @@ def inject_global_styles() -> None:
                 overflow: hidden;
                 border: 1px solid rgba(222, 216, 199, 0.95);
                 border-radius: 8px;
-                padding: 2.8rem;
+                padding: 3.2rem;
                 background:
-                    linear-gradient(135deg, rgba(255, 253, 247, 0.98), rgba(238, 233, 221, 0.88)),
-                    #fffdf7;
-                box-shadow: 0 28px 72px rgba(34, 45, 38, 0.12);
-                margin-bottom: 1.35rem;
+                    linear-gradient(135deg, rgba(16, 22, 17, 0.98), rgba(21, 38, 31, 0.97) 54%, rgba(48, 38, 23, 0.94)),
+                    #101611;
+                box-shadow: var(--shadow-strong);
+                margin-bottom: 1.55rem;
+            }
+            .hero::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background:
+                    repeating-linear-gradient(90deg, rgba(255, 250, 240, 0.055) 0 1px, transparent 1px 42px),
+                    repeating-linear-gradient(0deg, rgba(255, 250, 240, 0.040) 0 1px, transparent 1px 42px);
+                pointer-events: none;
             }
             .hero::after {
                 content: "";
                 position: absolute;
-                right: -3rem;
+                right: -4rem;
                 top: 0;
-                width: 24rem;
+                width: 28rem;
                 height: 100%;
                 background:
-                    linear-gradient(135deg, rgba(15, 118, 110, 0.18), rgba(124, 58, 237, 0.10)),
-                    repeating-linear-gradient(135deg, rgba(23, 33, 27, 0.08) 0 1px, transparent 1px 14px);
+                    linear-gradient(135deg, rgba(20, 184, 166, 0.25), rgba(208, 138, 29, 0.16)),
+                    repeating-linear-gradient(135deg, rgba(255, 250, 240, 0.20) 0 1px, transparent 1px 13px);
                 transform: skewX(-12deg);
                 border-radius: 8px;
             }
@@ -133,25 +159,26 @@ def inject_global_styles() -> None:
                 position: relative;
                 z-index: 1;
                 max-width: 860px;
-                font-size: 3rem;
-                line-height: 1.04;
+                font-size: 3.35rem;
+                line-height: 1.02;
                 margin: 0.25rem 0 1rem 0;
+                color: #fffaf0;
             }
             .hero-copy {
                 position: relative;
                 z-index: 1;
                 max-width: 760px;
-                color: var(--muted);
-                font-size: 1.05rem;
+                color: rgba(255, 250, 240, 0.76);
+                font-size: 1.08rem;
                 line-height: 1.7;
             }
             .eyebrow {
                 position: relative;
                 z-index: 1;
-                color: var(--accent);
+                color: #5eead4;
                 font-size: 0.78rem;
                 font-weight: 700;
-                letter-spacing: 0.08em;
+                letter-spacing: 0.12em;
                 margin: 0;
                 text-transform: uppercase;
             }
@@ -165,9 +192,10 @@ def inject_global_styles() -> None:
                 border-radius: 4px;
             }
             .portfolio-card, .stat-card, .contact-card, .insight-card {
-                border: 1px solid var(--line);
+                border: 1px solid rgba(216, 207, 187, 0.90);
                 border-radius: 8px;
-                background: var(--panel);
+                background:
+                    linear-gradient(180deg, rgba(255, 250, 240, 0.96), rgba(248, 241, 226, 0.92));
                 box-shadow: var(--shadow);
             }
             .portfolio-card {
@@ -175,12 +203,21 @@ def inject_global_styles() -> None:
                 padding: 1.2rem;
                 display: flex;
                 flex-direction: column;
+                position: relative;
+                overflow: hidden;
                 transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
             }
+            .portfolio-card::before {
+                content: "";
+                position: absolute;
+                inset: 0 0 auto 0;
+                height: 4px;
+                background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent-2));
+            }
             .portfolio-card:hover, .stat-card:hover {
-                border-color: rgba(15, 118, 110, 0.34);
-                box-shadow: 0 22px 50px rgba(15, 118, 110, 0.12);
-                transform: translateY(-2px);
+                border-color: rgba(20, 184, 166, 0.40);
+                box-shadow: 0 26px 58px rgba(20, 26, 22, 0.16);
+                transform: translateY(-3px);
             }
             .portfolio-card h3 {
                 font-size: 1.05rem;
@@ -200,7 +237,7 @@ def inject_global_styles() -> None:
                 border: 1px solid rgba(15, 118, 110, 0.25);
                 border-radius: 999px;
                 color: #0f766e;
-                background: rgba(236, 253, 245, 0.78);
+                background: rgba(204, 251, 241, 0.48);
                 font-size: 0.76rem;
                 font-weight: 700;
                 padding: 0.18rem 0.55rem;
@@ -225,7 +262,7 @@ def inject_global_styles() -> None:
                 border: 1px solid var(--line);
                 border-radius: 8px;
                 background:
-                    linear-gradient(135deg, rgba(255, 253, 247, 0.96), rgba(239, 235, 224, 0.78)),
+                    linear-gradient(135deg, rgba(255, 250, 240, 0.96), rgba(238, 229, 210, 0.84)),
                     var(--panel);
                 box-shadow: var(--shadow);
                 box-sizing: border-box;
@@ -235,13 +272,24 @@ def inject_global_styles() -> None:
                 display: flex;
                 gap: 0.85rem;
                 align-items: flex-start;
+                position: relative;
                 transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
                 overflow: hidden;
             }
+            .focus-card::after {
+                content: "";
+                position: absolute;
+                right: -2rem;
+                bottom: -2.5rem;
+                width: 7rem;
+                height: 7rem;
+                border: 1px solid rgba(20, 184, 166, 0.12);
+                transform: rotate(18deg);
+            }
             .focus-card:hover {
-                border-color: rgba(15, 118, 110, 0.34);
-                box-shadow: 0 22px 50px rgba(15, 118, 110, 0.12);
-                transform: translateY(-2px);
+                border-color: rgba(20, 184, 166, 0.40);
+                box-shadow: 0 24px 58px rgba(20, 26, 22, 0.15);
+                transform: translateY(-3px);
             }
             .focus-icon {
                 flex: 0 0 auto;
@@ -250,9 +298,11 @@ def inject_global_styles() -> None:
                 border-radius: 8px;
                 display: grid;
                 place-items: center;
-                background: rgba(15, 118, 110, 0.10);
-                border: 1px solid rgba(15, 118, 110, 0.16);
+                background:
+                    linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(208, 138, 29, 0.12));
+                border: 1px solid rgba(20, 184, 166, 0.22);
                 color: var(--accent);
+                box-shadow: inset 0 0 0 1px rgba(255, 250, 240, 0.55);
             }
             .focus-icon svg {
                 width: 1.35rem;
@@ -315,7 +365,8 @@ def inject_global_styles() -> None:
             .section-band {
                 border: 1px solid var(--line);
                 border-radius: 8px;
-                background: rgba(255, 253, 247, 0.82);
+                background:
+                    linear-gradient(180deg, rgba(255, 250, 240, 0.94), rgba(246, 238, 222, 0.88));
                 padding: 1.2rem;
                 min-height: 100%;
                 box-shadow: 0 14px 34px rgba(34, 45, 38, 0.06);
@@ -333,7 +384,8 @@ def inject_global_styles() -> None:
             .market-card {
                 border: 1px solid var(--line);
                 border-radius: 8px;
-                background: rgba(255, 253, 247, 0.82);
+                background:
+                    linear-gradient(180deg, rgba(255, 250, 240, 0.94), rgba(246, 238, 222, 0.88));
                 padding: 1.2rem;
                 box-sizing: border-box;
                 height: 318px;
@@ -368,7 +420,8 @@ def inject_global_styles() -> None:
             .kpi-card {
                 border: 1px solid rgba(222, 216, 199, 0.94);
                 border-radius: 8px;
-                background: var(--panel);
+                background:
+                    linear-gradient(180deg, rgba(255, 250, 240, 0.96), rgba(245, 238, 222, 0.92));
                 box-shadow: var(--shadow);
                 box-sizing: border-box;
                 height: 158px;
@@ -456,9 +509,9 @@ def inject_global_styles() -> None:
             div[data-testid="stPlotlyChart"] {
                 border: 1px solid rgba(222, 216, 199, 0.72);
                 border-radius: 8px;
-                background: rgba(255, 253, 247, 0.80);
+                background: rgba(255, 250, 240, 0.86);
                 padding: 0.35rem;
-                box-shadow: 0 14px 34px rgba(34, 45, 38, 0.06);
+                box-shadow: 0 16px 42px rgba(20, 26, 22, 0.10);
             }
             @media (max-width: 760px) {
                 .hero {
