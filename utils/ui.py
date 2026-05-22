@@ -86,6 +86,7 @@ def inject_global_styles() -> None:
                 border: 1px solid rgba(222, 216, 199, 0.94);
                 border-radius: 8px;
                 padding: 1rem 1.1rem;
+                margin-top: 0.65rem;
                 min-height: 136px;
                 height: 100%;
                 box-shadow: var(--shadow);

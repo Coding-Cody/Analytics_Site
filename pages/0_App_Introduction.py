@@ -23,7 +23,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-top_cols = st.columns([1.15, 0.85], gap="large")
+top_cols = st.columns([1.15, 0.85], gap="medium")
 with top_cols[0]:
     st.markdown(
         """
@@ -97,3 +97,4 @@ projects = [
 for col, project in zip(card_cols, projects):
     with col:
         render_project_card(project["title"], project["status"], project["body"])
+

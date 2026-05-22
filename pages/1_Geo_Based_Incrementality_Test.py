@@ -37,7 +37,7 @@ synthetic_df = load_synthetic_control_data()
 
 if methodology == "Matched-market test":
     st.subheader("Matched-market Test Design")
-    left, right = st.columns([1.05, 0.95], gap="large")
+    left, right = st.columns([1.05, 0.95], gap="medium")
     with left:
         st.markdown(
             """
@@ -213,3 +213,4 @@ else:
     render_insight(
         "This view converts the test into a week-by-week treatment effect and makes it easier to separate launch noise from sustained incremental impact."
     )
+

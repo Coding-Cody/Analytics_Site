@@ -85,7 +85,7 @@ render_insight(
     "This view keeps planning context close to business KPIs: inflation affects pricing and consumer pressure, unemployment affects demand and labour conditions, and policy rates influence financing and discount-rate assumptions."
 )
 
-left, right = st.columns([1, 1], gap="large")
+left, right = st.columns([1, 1], gap="medium")
 with left:
     heatmap_df = filtered_cards.copy()
     heatmap_df["display_value"] = heatmap_df["value"]
@@ -131,3 +131,4 @@ with st.expander("Source and refresh notes"):
         """
     )
     st.dataframe(filtered_cards, width="stretch", hide_index=True)
+

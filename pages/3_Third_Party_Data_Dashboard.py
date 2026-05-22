@@ -23,7 +23,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-left, right = st.columns([1.1, 0.9], gap="large")
+left, right = st.columns([1.1, 0.9], gap="medium")
 
 with left:
     st.markdown(
@@ -56,3 +56,4 @@ with right:
         """,
         unsafe_allow_html=True,
     )
+

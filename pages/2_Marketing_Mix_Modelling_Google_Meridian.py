@@ -78,7 +78,7 @@ weekly_kpi = (
 )
 
 st.subheader("Business Problem")
-left, right = st.columns([1.05, 0.95], gap="large")
+left, right = st.columns([1.05, 0.95], gap="medium")
 with left:
     st.markdown(
         """
@@ -164,7 +164,7 @@ render_insight(
     "The KPI view combines baseline demand and media-driven contribution. A useful MMM read asks whether posterior contribution moves plausibly with transformed media pressure, not raw spend alone."
 )
 
-left_chart, right_chart = st.columns(2, gap="large")
+left_chart, right_chart = st.columns(2, gap="medium")
 with left_chart:
     contribution_fig = px.bar(
         summary,
@@ -178,9 +178,9 @@ with left_chart:
     )
     contribution_fig.update_layout(showlegend=False)
     st.plotly_chart(contribution_fig, width="stretch")
-render_insight(
-    "Contribution ranks channels by estimated business impact after transformation, baseline adjustment, Bayesian shrinkage, and response modeling."
-)
+    render_insight(
+        "Contribution ranks channels by estimated business impact after transformation, baseline adjustment, Bayesian shrinkage, and response modeling."
+    )
 
 with right_chart:
     roi_fig = px.bar(
@@ -222,7 +222,7 @@ render_insight(
     "Ad-stock captures memory: TV and YouTube retain influence longer, while search decays faster. This prevents the model from forcing all media impact into the week spend occurred."
 )
 
-curve_col, marginal_col = st.columns(2, gap="large")
+curve_col, marginal_col = st.columns(2, gap="medium")
 with curve_col:
     curve_fig = px.line(
         filtered_curves,
@@ -238,7 +238,7 @@ with curve_col:
         },
     )
     st.plotly_chart(curve_fig, width="stretch")
-render_insight(
+    render_insight(
         "Saturation curves show diminishing returns. The Hill function makes this explicit: alpha controls steepness and ec50 controls how quickly the channel reaches half of its maximum response."
     )
 
@@ -253,7 +253,7 @@ with marginal_col:
         labels={"weekly_spend": "Weekly spend", "marginal_return": "Marginal return"},
     )
     st.plotly_chart(marginal_fig, width="stretch")
-render_insight(
+    render_insight(
         "Marginal return is the planning layer: channels with high average ROI may still be poor candidates for incremental budget if their posterior response curve is already near saturation."
     )
 
@@ -315,3 +315,4 @@ with st.expander("Channel model summary"):
         width="stretch",
         hide_index=True,
     )
+
