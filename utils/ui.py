@@ -264,6 +264,43 @@ def inject_global_styles() -> None:
                 min-height: 100%;
                 box-shadow: 0 14px 34px rgba(34, 45, 38, 0.06);
             }
+            .paired-card {
+                min-height: 286px;
+            }
+            .market-card {
+                border: 1px solid var(--line);
+                border-radius: 8px;
+                background: rgba(255, 253, 247, 0.82);
+                padding: 1.2rem;
+                min-height: 286px;
+                box-shadow: 0 14px 34px rgba(34, 45, 38, 0.06);
+            }
+            .market-card h3 {
+                margin-top: 0;
+                margin-bottom: 0.85rem;
+            }
+            .market-group-title {
+                color: var(--ink);
+                font-size: 0.82rem;
+                font-weight: 750;
+                letter-spacing: 0.04em;
+                margin: 0.85rem 0 0.45rem 0;
+                text-transform: uppercase;
+            }
+            .market-chip-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.45rem;
+            }
+            .market-chip {
+                border: 1px solid rgba(15, 118, 110, 0.22);
+                border-radius: 999px;
+                background: rgba(236, 253, 245, 0.64);
+                color: #17453d;
+                font-size: 0.84rem;
+                font-weight: 650;
+                padding: 0.32rem 0.62rem;
+            }
             .welcome-grid-card {
                 height: 300px;
                 border: 1px solid var(--line);

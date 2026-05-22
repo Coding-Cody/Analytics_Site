@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import html
 import numpy as np
 import plotly.express as px
 import streamlit as st
@@ -37,11 +38,11 @@ synthetic_df = load_synthetic_control_data()
 
 if methodology == "Matched-market test":
     st.subheader("Matched-market Test Design")
-    left, right = st.columns([1.05, 0.95], gap="medium")
+    left, right = st.columns(2, gap="small")
     with left:
         st.markdown(
             """
-            <div class="section-band">
+            <div class="section-band paired-card">
                 <h3>Why matched markets?</h3>
                 <p>
                     A one-market-vs-one-market comparison is fragile because market size,
@@ -62,10 +63,22 @@ if methodology == "Matched-market test":
         control_markets = sorted(
             market_df.loc[market_df["group"] == "Matched controls", "market"].unique()
         )
-        st.markdown("**Test market group**")
-        st.write(", ".join(test_markets))
-        st.markdown("**Control market group**")
-        st.write(", ".join(control_markets))
+        test_chips = "".join(f'<span class="market-chip">{html.escape(market)}</span>' for market in test_markets)
+        control_chips = "".join(
+            f'<span class="market-chip">{html.escape(market)}</span>' for market in control_markets
+        )
+        st.markdown(
+            f"""
+            <div class="market-card">
+                <h3>Market matching setup</h3>
+                <p class="market-group-title">Test market group</p>
+                <div class="market-chip-row">{test_chips}</div>
+                <p class="market-group-title">Control market group</p>
+                <div class="market-chip-row">{control_chips}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     test_post = group_df[(group_df["group"] == "Test markets") & (group_df["period"] == "Test period")][
         "kpi"

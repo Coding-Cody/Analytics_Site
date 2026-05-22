@@ -78,11 +78,11 @@ weekly_kpi = (
 )
 
 st.subheader("Business Problem")
-left, right = st.columns([1.05, 0.95], gap="medium")
+left, right = st.columns(2, gap="small")
 with left:
     st.markdown(
         """
-        <div class="section-band">
+        <div class="section-band paired-card">
             <h3>Decision context</h3>
             <p>
                 The core planning question is how much incremental outcome each channel
@@ -98,7 +98,7 @@ with left:
 with right:
     st.markdown(
         """
-        <div class="section-band">
+        <div class="section-band paired-card">
             <h3>How Meridian fits</h3>
             <p>
                 Google Meridian supports Bayesian MMM workflows with media transformations,
