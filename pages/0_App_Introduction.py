@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from utils.ui import inject_global_styles, render_project_card, render_stat_card, render_welcome_card
+from utils.ui import inject_global_styles, render_project_card, render_stat_card
 
 
 inject_global_styles()
@@ -28,12 +28,11 @@ with top_cols[0]:
     st.markdown(
         """
         <div class="section-band">
-            <h3>Portfolio positioning</h3>
+            <h3>Technical focus</h3>
             <p>
-                This app is designed for recruiters, hiring managers, and business
-                partners who want to see how analytical work translates into decisions:
-                where to invest, what changed, which markets to compare, and how to
-                monitor performance with enough statistical discipline.
+                The purpose of this app is to demonstrate applied data science work in
+                a structured way: measurement design, model interpretation, dashboard
+                logic, KPI monitoring, and the statistical assumptions behind each view.
             </p>
         </div>
         """,
@@ -67,42 +66,6 @@ focus_items = [
 for index, item in enumerate(focus_items):
     with focus_cols[index % 4]:
         render_stat_card(item[0], item[1])
-
-st.divider()
-
-st.subheader("Section Guide")
-welcome_cols = st.columns(5)
-welcome_sections = [
-    (
-        "Home",
-        "App Introduction",
-        "A guided overview of Cody's analytics portfolio, focus areas, contact links, and project roadmap.",
-    ),
-    (
-        "Map",
-        "Geo Incrementality",
-        "Market-level causal measurement using matched markets, synthetic controls, DiD, and uncertainty checks.",
-    ),
-    (
-        "MMM",
-        "Marketing Mix Modelling",
-        "Bayesian MMM concepts including ad-stock, Hill saturation, response curves, ROI, and contribution.",
-    ),
-    (
-        "BI",
-        "Third-party Dashboard",
-        "A reserved dashboard area for external data, benchmarks, filters, and professional reporting.",
-    ),
-    (
-        "KPI",
-        "Macro KPI Tracker",
-        "Canadian and global macro-financial indicators for planning context and executive monitoring.",
-    ),
-]
-
-for col, section in zip(welcome_cols, welcome_sections):
-    with col:
-        render_welcome_card(section[0], section[1], section[2])
 
 st.divider()
 

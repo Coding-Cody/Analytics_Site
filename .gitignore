@@ -14,14 +14,18 @@ venv/
 
 # Streamlit
 .streamlit/secrets.toml
+.streamlit/credentials.toml
 
 # Data and generated outputs
 data/raw/
 data/private/
 outputs/
+*.log
 
 # OS/editor files
 .DS_Store
 Thumbs.db
+.env.*
+!.env.example
 .vscode/
 .idea/
