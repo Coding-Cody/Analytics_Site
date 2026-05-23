@@ -83,21 +83,29 @@ def inject_global_styles() -> None:
                 border-bottom: 1px solid rgba(216, 207, 187, 0.62);
             }
             div[data-testid="stTopNav"] {
-                width: fit-content;
-                max-width: calc(100vw - 3rem);
+                width: 100%;
+                max-width: 1180px;
                 margin: 0.55rem auto 0.4rem auto;
-                padding: 0.38rem;
+                padding: 0.35rem;
                 border: 1px solid rgba(216, 207, 187, 0.88);
-                border-radius: 999px;
+                border-radius: 12px;
                 background: rgba(255, 250, 240, 0.78);
                 box-shadow: 0 16px 44px rgba(20, 26, 22, 0.12);
                 backdrop-filter: blur(18px);
+                overflow-x: auto;
+                scrollbar-width: thin;
             }
             div[data-testid="stTopNav"] a {
-                border-radius: 999px;
+                border-radius: 8px;
                 font-weight: 760;
+                font-size: 0.86rem;
+                line-height: 1.1;
                 color: var(--muted);
-                padding-inline: 0.9rem;
+                padding: 0.55rem 0.72rem;
+                white-space: nowrap;
+                min-height: 2.35rem;
+                display: inline-flex;
+                align-items: center;
             }
             div[data-testid="stTopNav"] a:hover {
                 color: var(--ink);
@@ -275,7 +283,7 @@ def inject_global_styles() -> None:
                     var(--panel);
                 box-shadow: var(--shadow);
                 box-sizing: border-box;
-                height: 188px;
+                height: 194px;
                 padding: 1rem;
                 margin-bottom: 1rem;
                 display: flex;
@@ -637,8 +645,10 @@ def render_focus_card(icon: str, title: str, body: str) -> None:
         "dashboard": '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M9 10v10"></path><path d="M13 15h4"></path></svg>',
         "forecast": '<svg viewBox="0 0 24 24"><path d="M4 18l5-5 4 3 7-9"></path><path d="M15 7h5v5"></path><path d="M4 6v12h16"></path></svg>',
         "experiment": '<svg viewBox="0 0 24 24"><path d="M9 3h6"></path><path d="M10 3v5l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 17l-5-9V3"></path><path d="M7 16h10"></path></svg>',
+        "cluster": '<svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="3"></circle><circle cx="17" cy="6" r="2.5"></circle><circle cx="16" cy="17" r="3"></circle><path d="M8.6 8.4l5.8 6.2"></path><path d="M8.9 6.7l5.6-.5"></path><path d="M16.3 8.5l-.2 5.5"></path></svg>',
         "database": '<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></svg>',
         "globe": '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.2 2.4 3.2 5.4 3.2 9S14.2 18.6 12 21"></path><path d="M12 3C9.8 5.4 8.8 8.4 8.8 12S9.8 18.6 12 21"></path></svg>',
+        "mlops": '<svg viewBox="0 0 24 24"><path d="M4 17V7l8-4 8 4v10l-8 4-8-4z"></path><path d="M12 3v7"></path><path d="M20 7l-8 4-8-4"></path><path d="M8 14h8"></path><path d="M10 17h4"></path></svg>',
     }
     icon_markup = icons.get(icon, html.escape(icon))
     st.markdown(

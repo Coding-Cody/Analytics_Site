@@ -49,9 +49,9 @@ focus_items = [
     ("curve", "MMM", "Bayesian hierarchy, ad-stock, Hill saturation, priors, and posteriors."),
     ("dashboard", "Dashboarding", "Executive-ready Streamlit and Plotly decision surfaces."),
     ("forecast", "Forecasting", "Trend, seasonality, decomposition, and scenario monitoring."),
-    ("experiment", "Experimentation", "Power, uncertainty, lift, confidence intervals, and validity checks."),
+    ("cluster", "Clustering", "Segmentation, similarity scoring, cohort discovery, profiling, and actionability checks."),
     ("database", "Python + SQL", "Pipelines, analytical marts, feature shaping, and repeatable reporting."),
-    ("globe", "Financial KPIs", "Macro signals, rate context, z-scores, and KPI monitoring."),
+    ("mlops", "MLOps", "Model packaging, monitoring, reproducible pipelines, deployment readiness, and governance."),
 ]
 
 for index, item in enumerate(focus_items):
