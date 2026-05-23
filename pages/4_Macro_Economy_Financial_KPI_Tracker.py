@@ -4,6 +4,7 @@ import plotly.express as px
 import streamlit as st
 
 from utils.data import load_macro_kpi_data
+from utils.theme import MACRO_COLORS
 from utils.ui import inject_global_styles, render_insight, render_kpi_card
 
 
@@ -78,7 +79,7 @@ trend_fig = px.line(
     markers=True,
     title="Macro-financial Trend Monitor",
     labels={"period": "Period", "value": "Value", "indicator": "Indicator"},
-    color_discrete_sequence=["#2563eb", "#0f766e", "#be185d", "#f97316"],
+    color_discrete_sequence=MACRO_COLORS,
 )
 trend_fig.update_layout(hovermode="x unified")
 st.plotly_chart(trend_fig, width="stretch")

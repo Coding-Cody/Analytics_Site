@@ -71,6 +71,7 @@ pages/2_Marketing_Mix_Modelling_Google_Meridian.py
 pages/3_Third_Party_Data_Dashboard.py
 pages/4_Macro_Economy_Financial_KPI_Tracker.py
 utils/data.py
+utils/theme.py
 utils/ui.py
 .streamlit/config.toml
 ```
@@ -104,7 +105,24 @@ textColor = "#141a16"
 font = "sans serif"
 ```
 
-Most styling is centralized in:
+Most app-level colors and chart palettes are centralized in:
+
+```text
+utils/theme.py
+```
+
+Use this file first when changing the visual theme. It defines:
+
+- `THEME` for CSS and Plotly tokens
+- `PLOTLY_COLORWAY`
+- `CHANNEL_COLORS`
+- `MMM_KPI_COLORS`
+- `GEO_COLORS`
+- `MACRO_COLORS`
+
+Streamlit still requires a few static theme values in `.streamlit/config.toml`, so update that file only for the Streamlit shell theme. Page code should import named colors from `utils/theme.py` instead of hard-coding hex values.
+
+Most reusable layout and component styling is centralized in:
 
 ```text
 utils/ui.py
@@ -153,7 +171,7 @@ Important layout rules already applied:
 - Focus Areas use pictogram-style SVG icons, not letters.
 - KPI rows use custom KPI cards, not default `st.metric`, where formatting matters.
 - Paired explanation cards use `paired-card`.
-- App intro contact links are near the bottom, not in the opening top row.
+- App intro contact/profile card sits near the top under the hero and uses `Cody.JPG` as a circular cropped image.
 
 ## MMM Page
 
@@ -189,19 +207,8 @@ Current charts:
 
 Color rule:
 
-- Channel-based charts use the same light channel palette:
-
-```python
-SOFT_CHANNEL_COLORS = {
-    "Paid Search": "#8ecac0",
-    "Paid Social": "#d8a9be",
-    "YouTube": "#e7bd82",
-    "Display": "#a9cfa9",
-    "TV": "#b7add7",
-}
-```
-
-- Keep **KPI and Estimated Media Contribution Over Time** unchanged from the special dark/teal treatment.
+- Channel-based charts use `CHANNEL_COLORS` from `utils/theme.py`.
+- Keep **KPI and Estimated Media Contribution Over Time** on `MMM_KPI_COLORS` from `utils/theme.py`, which intentionally uses a special KPI/contribution treatment.
 
 ## Geo Page
 

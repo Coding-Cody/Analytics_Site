@@ -7,27 +7,29 @@ from pathlib import Path
 import plotly.io as pio
 import streamlit as st
 
+from utils.theme import PLOTLY_COLORWAY, THEME
+
 
 def inject_global_styles() -> None:
     pio.templates["portfolio_premium"] = {
         "layout": {
-            "font": {"family": "Arial, sans-serif", "color": "#141a16"},
-            "paper_bgcolor": "rgba(255,253,247,0)",
-            "plot_bgcolor": "rgba(255,250,240,0.82)",
-            "colorway": ["#14b8a6", "#7c3aed", "#d08a1d", "#2563eb", "#be185d", "#475569"],
+            "font": {"family": "Arial, sans-serif", "color": THEME["ink"]},
+            "paper_bgcolor": THEME["paper_bg"],
+            "plot_bgcolor": THEME["plot_bg"],
+            "colorway": PLOTLY_COLORWAY,
             "xaxis": {
-                "gridcolor": "rgba(102,113,102,0.14)",
-                "linecolor": "rgba(102,113,102,0.20)",
-                "zerolinecolor": "rgba(102,113,102,0.18)",
+                "gridcolor": THEME["grid"],
+                "linecolor": THEME["axis"],
+                "zerolinecolor": THEME["zero"],
             },
             "yaxis": {
-                "gridcolor": "rgba(102,113,102,0.14)",
-                "linecolor": "rgba(102,113,102,0.20)",
-                "zerolinecolor": "rgba(102,113,102,0.18)",
+                "gridcolor": THEME["grid"],
+                "linecolor": THEME["axis"],
+                "zerolinecolor": THEME["zero"],
             },
             "legend": {"orientation": "h", "y": 1.08, "x": 0},
             "margin": {"l": 32, "r": 24, "t": 72, "b": 48},
-            "title": {"font": {"size": 18, "color": "#141a16"}},
+            "title": {"font": {"size": 18, "color": THEME["ink"]}},
         }
     }
     pio.templates.default = "portfolio_premium"
@@ -36,24 +38,29 @@ def inject_global_styles() -> None:
         """
         <style>
             :root {
-                --ink: #141a16;
-                --deep: #101611;
-                --muted: #60695f;
-                --line: #d8cfbb;
-                --soft: #f4efe3;
-                --panel: rgba(255, 250, 240, 0.91);
-                --accent: #14b8a6;
-                --accent-2: #7c3aed;
-                --gold: #d08a1d;
-                --rose: #be185d;
-                --shadow: 0 18px 48px rgba(20, 26, 22, 0.13);
-                --shadow-strong: 0 28px 80px rgba(20, 26, 22, 0.20);
+                --ink: __INK__;
+                --deep: __DEEP__;
+                --muted: __MUTED__;
+                --line: __LINE__;
+                --soft: __SOFT__;
+                --soft-mid: __SOFT_MID__;
+                --soft-light: __SOFT_LIGHT__;
+                --sidebar: __SIDEBAR__;
+                --panel: __PANEL__;
+                --accent: __ACCENT__;
+                --accent-2: __ACCENT_2__;
+                --gold: __GOLD__;
+                --rose: __ROSE__;
+                --status-text: __STATUS_TEXT__;
+                --placeholder-line: __PLACEHOLDER_LINE__;
+                --shadow: __SHADOW__;
+                --shadow-strong: __SHADOW_STRONG__;
             }
             .stApp {
                 background:
                     linear-gradient(rgba(20, 26, 22, 0.025) 1px, transparent 1px),
                     linear-gradient(90deg, rgba(20, 26, 22, 0.025) 1px, transparent 1px),
-                    linear-gradient(180deg, #f4efe3 0%, #eee6d6 45%, #fffaf0 100%);
+                    linear-gradient(180deg, var(--soft) 0%, var(--soft-mid) 45%, var(--soft-light) 100%);
                 background-size: 34px 34px, 34px 34px, auto;
             }
             .block-container {
@@ -97,7 +104,7 @@ def inject_global_styles() -> None:
                 background: rgba(20, 184, 166, 0.10);
             }
             div[data-testid="stSidebar"] {
-                background: #eee6d6;
+                background: var(--sidebar);
                 border-right: 1px solid var(--line);
             }
             div[data-testid="stMetric"] {
@@ -131,7 +138,7 @@ def inject_global_styles() -> None:
                 padding: 3.2rem;
                 background:
                     linear-gradient(135deg, rgba(16, 22, 17, 0.98), rgba(21, 38, 31, 0.97) 54%, rgba(48, 38, 23, 0.94)),
-                    #101611;
+                    var(--deep);
                 box-shadow: var(--shadow-strong);
                 margin-bottom: 1.55rem;
             }
@@ -164,7 +171,7 @@ def inject_global_styles() -> None:
                 font-size: 3.35rem;
                 line-height: 1.02;
                 margin: 0.25rem 0 1rem 0;
-                color: #fffaf0;
+                color: __HERO_TEXT__;
             }
             .hero-copy {
                 position: relative;
@@ -177,7 +184,7 @@ def inject_global_styles() -> None:
             .eyebrow {
                 position: relative;
                 z-index: 1;
-                color: #5eead4;
+                color: __HERO_EYEBROW__;
                 font-size: 0.78rem;
                 font-weight: 700;
                 letter-spacing: 0.12em;
@@ -188,7 +195,7 @@ def inject_global_styles() -> None:
                 border: 1px solid rgba(15, 118, 110, 0.22);
                 border-left: 4px solid var(--accent);
                 background: rgba(236, 253, 245, 0.62);
-                color: #334155;
+                color: __NOTE_TEXT__;
                 padding: 0.9rem 1rem;
                 margin: 0.75rem 0 1.25rem 0;
                 border-radius: 4px;
@@ -238,7 +245,7 @@ def inject_global_styles() -> None:
                 display: inline-block;
                 border: 1px solid rgba(15, 118, 110, 0.25);
                 border-radius: 999px;
-                color: #0f766e;
+                color: var(--status-text);
                 background: rgba(204, 251, 241, 0.48);
                 font-size: 0.76rem;
                 font-weight: 700;
@@ -392,7 +399,7 @@ def inject_global_styles() -> None:
                 border-left: 4px solid var(--accent);
             }
             .placeholder-panel {
-                border: 1px dashed #b7ad97;
+                border: 1px dashed var(--placeholder-line);
                 border-radius: 8px;
                 background:
                     linear-gradient(135deg, rgba(15, 118, 110, 0.07), rgba(183, 121, 31, 0.08)),
@@ -454,7 +461,7 @@ def inject_global_styles() -> None:
                 border: 1px solid rgba(15, 118, 110, 0.22);
                 border-radius: 999px;
                 background: rgba(236, 253, 245, 0.64);
-                color: #17453d;
+                color: __CHIP_TEXT__;
                 font-size: 0.84rem;
                 font-weight: 650;
                 padding: 0.32rem 0.62rem;
@@ -541,7 +548,7 @@ def inject_global_styles() -> None:
                 border-radius: 8px;
                 background: rgba(236, 253, 245, 0.58);
                 padding: 1rem;
-                color: #334155;
+                color: __NOTE_TEXT__;
             }
             div[data-testid="stExpander"] {
                 border-color: var(--line);
@@ -571,7 +578,28 @@ def inject_global_styles() -> None:
                 }
             }
         </style>
-        """,
+        """
+        .replace("__INK__", THEME["ink"])
+        .replace("__DEEP__", THEME["deep"])
+        .replace("__MUTED__", THEME["muted"])
+        .replace("__LINE__", THEME["line"])
+        .replace("__SOFT__", THEME["soft"])
+        .replace("__SOFT_MID__", THEME["soft_mid"])
+        .replace("__SOFT_LIGHT__", THEME["soft_light"])
+        .replace("__SIDEBAR__", THEME["sidebar"])
+        .replace("__PANEL__", THEME["panel"])
+        .replace("__ACCENT__", THEME["accent"])
+        .replace("__ACCENT_2__", THEME["accent_2"])
+        .replace("__GOLD__", THEME["gold"])
+        .replace("__ROSE__", THEME["rose"])
+        .replace("__STATUS_TEXT__", THEME["status_text"])
+        .replace("__PLACEHOLDER_LINE__", THEME["placeholder_line"])
+        .replace("__SHADOW__", THEME["shadow"])
+        .replace("__SHADOW_STRONG__", THEME["shadow_strong"])
+        .replace("__HERO_TEXT__", THEME["hero_text"])
+        .replace("__HERO_EYEBROW__", THEME["hero_eyebrow"])
+        .replace("__NOTE_TEXT__", THEME["note_text"])
+        .replace("__CHIP_TEXT__", THEME["chip_text"]),
         unsafe_allow_html=True,
     )
 

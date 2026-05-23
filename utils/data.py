@@ -3,6 +3,8 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
+from utils.theme import CHANNEL_COLORS
+
 
 CHANNELS = {
     "Paid Search": {
@@ -11,7 +13,7 @@ CHANNELS = {
         "half_life": 1.2,
         "alpha": 1.35,
         "ec50": 72_000,
-        "color": "#0f766e",
+        "color": CHANNEL_COLORS["Paid Search"],
         "response": "High intent demand capture with faster carryover decay.",
     },
     "Paid Social": {
@@ -20,7 +22,7 @@ CHANNELS = {
         "half_life": 2.0,
         "alpha": 1.20,
         "ec50": 64_000,
-        "color": "#6d5bd0",
+        "color": CHANNEL_COLORS["Paid Social"],
         "response": "Efficient reach and consideration builder with medium carryover.",
     },
     "YouTube": {
@@ -29,7 +31,7 @@ CHANNELS = {
         "half_life": 3.4,
         "alpha": 1.10,
         "ec50": 78_000,
-        "color": "#b7791f",
+        "color": CHANNEL_COLORS["YouTube"],
         "response": "Upper-funnel video with delayed conversion effect.",
     },
     "Display": {
@@ -38,7 +40,7 @@ CHANNELS = {
         "half_life": 1.7,
         "alpha": 1.00,
         "ec50": 52_000,
-        "color": "#64748b",
+        "color": CHANNEL_COLORS["Display"],
         "response": "Broad reach channel with modest marginal return.",
     },
     "TV": {
@@ -47,7 +49,7 @@ CHANNELS = {
         "half_life": 4.6,
         "alpha": 1.05,
         "ec50": 145_000,
-        "color": "#164e63",
+        "color": CHANNEL_COLORS["TV"],
         "response": "Scaled awareness channel with longer memory and slower decay.",
     },
 }

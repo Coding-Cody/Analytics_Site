@@ -6,6 +6,7 @@ import plotly.express as px
 import streamlit as st
 
 from utils.data import load_geo_test_data, load_synthetic_control_data
+from utils.theme import GEO_COLORS
 from utils.ui import inject_global_styles, render_insight, render_kpi_card
 
 
@@ -133,7 +134,7 @@ if methodology == "Matched-market test":
         markers=True,
         title="Average KPI Trend: Test Markets vs Matched Controls",
         labels={"week": "Week", "kpi": "KPI index", "group": "Market group"},
-        color_discrete_map={"Test markets": "#2563eb", "Matched controls": "#0f766e"},
+        color_discrete_map={"Test markets": GEO_COLORS["test"], "Matched controls": GEO_COLORS["control"]},
     )
     fig.add_vline(x=group_df[group_df["period"] == "Test period"]["week"].min(), line_dash="dash")
     fig.update_layout(hovermode="x unified")
@@ -150,7 +151,7 @@ if methodology == "Matched-market test":
         points="all",
         title="Market-level Distribution by Period",
         labels={"group": "Group", "kpi": "KPI index", "period": "Period"},
-        color_discrete_map={"Pre period": "#94a3b8", "Test period": "#2563eb"},
+        color_discrete_map={"Pre period": GEO_COLORS["pre"], "Test period": GEO_COLORS["test"]},
     )
     st.plotly_chart(market_fig, width="stretch")
     render_insight(
@@ -213,7 +214,7 @@ else:
         markers=True,
         title="Treated Geography vs Synthetic Control",
         labels={"week": "Week", "kpi": "KPI index", "series": "Series"},
-        color_discrete_map={"Treated geography": "#2563eb", "Synthetic control": "#0f766e"},
+        color_discrete_map={"Treated geography": GEO_COLORS["test"], "Synthetic control": GEO_COLORS["control"]},
     )
     fig.add_vline(x=wide["week"].iloc[12], line_dash="dash")
     fig.update_layout(hovermode="x unified")
@@ -229,7 +230,7 @@ else:
         title="Estimated Incremental Lift Over Time",
         labels={"week": "Week", "incremental_lift": "Treated minus synthetic control"},
     )
-    lift_fig.update_traces(marker_color="#be185d")
+    lift_fig.update_traces(marker_color=GEO_COLORS["lift"])
     st.plotly_chart(lift_fig, width="stretch")
     render_insight(
         "This view converts the test into a week-by-week treatment effect and makes it easier to separate launch noise from sustained incremental impact."
