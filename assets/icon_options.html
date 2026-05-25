@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Focus Area Icon Options</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f4efe3;
+      color: #141a16;
+      font-family: Arial, sans-serif;
+    }
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 42px 24px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+    }
+    .intro {
+      color: #60695f;
+      line-height: 1.55;
+      margin: 0 0 30px;
+    }
+    .section {
+      margin: 28px 0;
+    }
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 21px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .card {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      min-height: 118px;
+      padding: 16px;
+      border: 1px solid #d8cfbb;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(255,250,240,.96), rgba(238,229,210,.84));
+      box-shadow: 0 18px 48px rgba(20,26,22,.13);
+    }
+    .icon {
+      flex: 0 0 auto;
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(20,184,166,.15), rgba(208,138,29,.12));
+      border: 1px solid rgba(20,184,166,.22);
+      color: #14b8a6;
+    }
+    .icon svg {
+      width: 26px;
+      height: 26px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .copy {
+      color: #60695f;
+      font-size: 14px;
+      line-height: 1.42;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Focus Area Icon Options</h1>
+    <p class="intro">Choose one icon option per section. Option labels are only for selection; the app will keep the section titles.</p>
+
+    <section class="section">
+      <h2>Marketing Analytics</h2>
+      <div class="grid">
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></div><div><strong>A. Target</strong><div class="copy">Best for channel impact, ROI, and investment decisions.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 18h16"></path><path d="M6 16V9"></path><path d="M12 16V5"></path><path d="M18 16v-4"></path><path d="M5 9l7-4 7 7"></path></svg></div><div><strong>B. Growth Bars</strong><div class="copy">More business-facing, good for marketing performance.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 17l5-5 4 3 7-8"></path><path d="M15 7h5v5"></path><circle cx="7" cy="17" r="2"></circle></svg></div><div><strong>C. Response Path</strong><div class="copy">Good balance between analytics and business outcome.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Geo Experimentation</h2>
+      <div class="grid">
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"></path><path d="M9 3v15"></path><path d="M15 6v15"></path></svg></div><div><strong>A. Folded Map</strong><div class="copy">Clear geographic testing signal.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M12 21s7-5.2 7-11a7 7 0 0 0-14 0c0 5.8 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle><path d="M4 20h16"></path></svg></div><div><strong>B. Location Pin</strong><div class="copy">Simpler and more slide-friendly.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"></circle><circle cx="16" cy="16" r="3"></circle><path d="M10.5 10.5l3 3"></path><path d="M4 19c2-3 5-4 8-4"></path><path d="M20 5c-2 3-5 4-8 4"></path></svg></div><div><strong>C. Test vs Control</strong><div class="copy">Stronger causal-testing concept.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>MMM</h2>
+      <div class="grid">
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 19h16"></path><path d="M4 19c5-1 6-13 10-13 2.8 0 3.5 5 6 5"></path><path d="M15 6h5v5"></path></svg></div><div><strong>A. Saturation Curve</strong><div class="copy">Best for Hill saturation and diminishing returns.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 18h16"></path><path d="M6 16c2-8 5-8 7-2 1.2 3.4 3.2 3.6 5-2"></path><path d="M6 8c2 2 4 2 6 0s4-2 6 0"></path></svg></div><div><strong>B. Ad-stock Wave</strong><div class="copy">Better for carryover and lagged media effect.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M5 18h14"></path><path d="M7 16V8"></path><path d="M12 16V5"></path><path d="M17 16v-6"></path><path d="M4 6h16"></path><path d="M4 6c1.5 4 4.2 6 8 6s6.5-2 8-6"></path></svg></div><div><strong>C. Decomposition</strong><div class="copy">Best for contribution analysis and channel attribution.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Dashboarding</h2>
+      <div class="grid">
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M9 10v10"></path><path d="M13 15h4"></path></svg></div><div><strong>A. Dashboard Layout</strong><div class="copy">Current product-dashboard look.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="7" height="6" rx="1"></rect><rect x="13" y="5" width="7" height="4" rx="1"></rect><rect x="13" y="11" width="7" height="8" rx="1"></rect><rect x="4" y="13" width="7" height="6" rx="1"></rect></svg></div><div><strong>B. KPI Tiles</strong><div class="copy">More modern dashboard-card signal.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 19V5"></path><path d="M4 19h16"></path><path d="M8 16v-5"></path><path d="M12 16V8"></path><path d="M16 16v-7"></path><path d="M20 16v-3"></path></svg></div><div><strong>C. Analytics Panel</strong><div class="copy">Simple chart-forward icon.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Forecasting</h2>
+      <div class="grid">
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 18l5-5 4 3 7-9"></path><path d="M15 7h5v5"></path><path d="M4 6v12h16"></path></svg></div><div><strong>A. Trend Arrow</strong><div class="copy">Direct and readable.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 17c3-5 6-5 9 0s5 4 7-2"></path><path d="M4 10c3-4 6-4 9 0s5 3 7-1"></path><path d="M4 21h16"></path></svg></div><div><strong>B. Forecast Bands</strong><div class="copy">Better statistical forecasting signal.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M5 19h14"></path><path d="M7 16l4-4 3 2 4-7"></path><path d="M16 7h2v2"></path><path d="M7 7h3"></path><path d="M7 10h2"></path></svg></div><div><strong>C. Planning Chart</strong><div class="copy">Feels more business planning oriented.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Clustering</h2>
+      <div class="grid">
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><circle cx="7" cy="8" r="3"></circle><circle cx="17" cy="8" r="3"></circle><circle cx="12" cy="17" r="3"></circle><path d="M9.5 9.7h5"></path><path d="M8.5 10.5l2.3 4"></path><path d="M15.5 10.5l-2.3 4"></path></svg></div><div><strong>A. Connected Segments</strong><div class="copy">Clean and readable at card size.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="2.5"></circle><circle cx="16.5" cy="6.5" r="2"></circle><circle cx="17" cy="17" r="2.7"></circle><circle cx="7" cy="16" r="2"></circle><path d="M8.3 8.5l6.1 6.2"></path><path d="M8.5 15.8l6.1-7.7"></path></svg></div><div><strong>B. Network Map</strong><div class="copy">Most slide-style and visually active.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M5 6h5v5H5z"></path><path d="M14 5h5v5h-5z"></path><path d="M8 15h5v5H8z"></path><path d="M10 8h4"></path><path d="M11 11l-1.5 4"></path><path d="M16 10l-3.5 5"></path></svg></div><div><strong>C. Group Blocks</strong><div class="copy">More structured and technical.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Python + SQL</h2>
+      <div class="grid">
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></svg></div><div><strong>A. Database</strong><div class="copy">Clear SQL/data warehouse signal.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M8 9l-4 3 4 3"></path><path d="M16 9l4 3-4 3"></path><path d="M13 5l-2 14"></path></svg></div><div><strong>B. Code</strong><div class="copy">Simple Python/engineering signal.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 7h5"></path><path d="M15 7h5"></path><path d="M9 7c2 0 4 2 6 2h1"></path><path d="M4 17h5"></path><path d="M15 17h5"></path><path d="M9 17c2 0 4-2 6-2h1"></path></svg></div><div><strong>C. Pipeline</strong><div class="copy">Best for repeatable workflows and data movement.</div></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>MLOps</h2>
+      <div class="grid">
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 17V7l8-4 8 4v10l-8 4-8-4z"></path><path d="M4 7l8 4 8-4"></path><path d="M12 11v10"></path><path d="M8 15h8"></path></svg></div><div><strong>A. Model Package</strong><div class="copy">Good for deployment, packaging, and versioning.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="11" rx="2"></rect><path d="M8 20h8"></path><path d="M12 15v5"></path><path d="M8 9h3"></path><path d="M13 9h3"></path><path d="M8 12h8"></path></svg></div><div><strong>B. Monitoring Console</strong><div class="copy">Best for model monitoring and production dashboards.</div></div></div>
+        <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 18h16"></path><path d="M6 15V8"></path><path d="M12 15V5"></path><path d="M18 15v-4"></path><path d="M4 8h4"></path><path d="M10 5h4"></path><path d="M16 11h4"></path><path d="M8 8l2-3"></path><path d="M14 5l2 6"></path></svg></div><div><strong>C. Production Pipeline</strong><div class="copy">Best for orchestration and lifecycle management.</div></div></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
