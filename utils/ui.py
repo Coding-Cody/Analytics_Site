@@ -641,14 +641,14 @@ def render_focus_card(icon: str, title: str, body: str) -> None:
     icons = {
         "target": '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>',
         "map": '<svg viewBox="0 0 24 24"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"></path><path d="M9 3v15"></path><path d="M15 6v15"></path></svg>',
-        "curve": '<svg viewBox="0 0 24 24"><path d="M4 19h16"></path><path d="M4 19c5-1 6-13 10-13 2.8 0 3.5 5 6 5"></path><path d="M15 6h5v5"></path></svg>',
+        "curve": '<svg viewBox="0 0 24 24"><path d="M4 19V5"></path><path d="M4 19h16"></path><path d="M8 16v-5"></path><path d="M12 16V8"></path><path d="M16 16v-7"></path><path d="M20 16v-3"></path></svg>',
         "dashboard": '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M9 10v10"></path><path d="M13 15h4"></path></svg>',
         "forecast": '<svg viewBox="0 0 24 24"><path d="M4 18l5-5 4 3 7-9"></path><path d="M15 7h5v5"></path><path d="M4 6v12h16"></path></svg>',
         "experiment": '<svg viewBox="0 0 24 24"><path d="M9 3h6"></path><path d="M10 3v5l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 17l-5-9V3"></path><path d="M7 16h10"></path></svg>',
-        "cluster": '<svg viewBox="0 0 24 24"><path d="M4 18.5c1.8-2.2 4.8-2.2 6.6 0"></path><path d="M13.4 18.5c1.8-2.2 4.8-2.2 6.6 0"></path><circle cx="7.3" cy="11" r="2.1"></circle><circle cx="16.7" cy="11" r="2.1"></circle><circle cx="12" cy="6.3" r="2.1"></circle><path d="M9.1 9.6l1.5-1.8"></path><path d="M14.9 9.6l-1.5-1.8"></path><path d="M9.4 12.1h5.2"></path><path d="M3.8 21h16.4"></path></svg>',
+        "cluster": '<svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="2.5"></circle><circle cx="16.5" cy="6.5" r="2"></circle><circle cx="17" cy="17" r="2.7"></circle><circle cx="7" cy="16" r="2"></circle><path d="M8.3 8.5l6.1 6.2"></path><path d="M8.5 15.8l6.1-7.7"></path></svg>',
         "database": '<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></svg>',
         "globe": '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.2 2.4 3.2 5.4 3.2 9S14.2 18.6 12 21"></path><path d="M12 3C9.8 5.4 8.8 8.4 8.8 12S9.8 18.6 12 21"></path></svg>',
-        "mlops": '<svg viewBox="0 0 24 24"><path d="M5 17.5h4.2"></path><path d="M14.8 17.5H19"></path><path d="M9.2 17.5a2.8 2.8 0 1 0 5.6 0 2.8 2.8 0 0 0-5.6 0z"></path><path d="M12 14.7v-3.2"></path><path d="M7 11.5h10"></path><path d="M7 11.5a3 3 0 0 1 0-6c.6-1.7 2.2-2.8 4.1-2.8 2.3 0 4.2 1.7 4.4 4 1.5.2 2.7 1.5 2.7 3 0 1-.5 1.8-1.2 2.4"></path><path d="M10.6 17.5h2.8"></path><path d="M12 16.1v2.8"></path><path d="M4 20.8h16"></path></svg>',
+        "mlops": '<svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="5" height="5" rx="1"></rect><rect x="15.5" y="4.5" width="5" height="5" rx="1"></rect><rect x="9.5" y="14.5" width="5" height="5" rx="1"></rect><path d="M8.5 7h7"></path><path d="M18 9.5v2.2c0 1.5-1.2 2.8-2.8 2.8H12"></path><path d="M6 9.5v2.2c0 1.5 1.2 2.8 2.8 2.8H12"></path><path d="M16.2 17.2l1.3 1.3"></path><path d="M18.5 13.8l-1.1 1.1a2.2 2.2 0 0 0 3.1 3.1l1.1-1.1"></path></svg>',
     }
     icon_markup = icons.get(icon, html.escape(icon))
     st.markdown(

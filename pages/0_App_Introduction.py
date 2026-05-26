@@ -50,7 +50,7 @@ focus_items = [
     ("dashboard", "Dashboarding", "Executive-ready Streamlit and Plotly decision surfaces."),
     ("forecast", "Forecasting", "Trend, seasonality, decomposition, and scenario monitoring."),
     ("cluster", "Clustering", "Segmentation, similarity scoring, cohort discovery, profiling, and actionability checks."),
-    ("database", "Python + SQL", "Pipelines, analytical marts, feature shaping, and repeatable reporting."),
+    ("database", "Programming", "Python, PySpark, SQL, analytical pipelines, feature shaping, and repeatable reporting."),
     ("mlops", "MLOps", "Model packaging, monitoring, reproducible pipelines, deployment readiness, and governance."),
 ]
 
