@@ -648,7 +648,7 @@ def render_focus_card(icon: str, title: str, body: str) -> None:
         "cluster": '<svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="2.5"></circle><circle cx="16.5" cy="6.5" r="2"></circle><circle cx="17" cy="17" r="2.7"></circle><circle cx="7" cy="16" r="2"></circle><path d="M8.3 8.5l6.1 6.2"></path><path d="M8.5 15.8l6.1-7.7"></path></svg>',
         "database": '<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></svg>',
         "globe": '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.2 2.4 3.2 5.4 3.2 9S14.2 18.6 12 21"></path><path d="M12 3C9.8 5.4 8.8 8.4 8.8 12S9.8 18.6 12 21"></path></svg>',
-        "mlops": '<svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="5" height="5" rx="1"></rect><rect x="15.5" y="4.5" width="5" height="5" rx="1"></rect><rect x="9.5" y="14.5" width="5" height="5" rx="1"></rect><path d="M8.5 7h7"></path><path d="M18 9.5v2.2c0 1.5-1.2 2.8-2.8 2.8H12"></path><path d="M6 9.5v2.2c0 1.5 1.2 2.8 2.8 2.8H12"></path><path d="M16.2 17.2l1.3 1.3"></path><path d="M18.5 13.8l-1.1 1.1a2.2 2.2 0 0 0 3.1 3.1l1.1-1.1"></path></svg>',
+        "mlops": '<svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="5" height="5" rx="1"></rect><rect x="15.5" y="4.5" width="5" height="5" rx="1"></rect><rect x="9.5" y="14.5" width="5" height="5" rx="1"></rect><path d="M8.5 7h7"></path><path d="M18 9.5v2.2c0 1.5-1.2 2.8-2.8 2.8H12"></path><path d="M6 9.5v2.2c0 1.5 1.2 2.8 2.8 2.8H12"></path><path d="M12 12.2v2.3"></path><path d="M10.8 17h2.4"></path></svg>',
     }
     icon_markup = icons.get(icon, html.escape(icon))
     st.markdown(
