@@ -61,3 +61,11 @@ GEO_COLORS = {
 }
 
 MACRO_COLORS = ["#2563eb", "#0f766e", THEME["rose"], "#f97316"]
+
+SEGMENT_COLORS = {
+    "Made-to-Measure Loyalists": "#8ecac0",
+    "Wardrobe Builders": "#d8a9be",
+    "Occasion Suit Buyers": "#e7bd82",
+    "Digital Style Seekers": "#a9cfa9",
+    "Entry Luxury Gifters": "#b7add7",
+}

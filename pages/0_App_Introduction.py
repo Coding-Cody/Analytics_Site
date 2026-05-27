@@ -61,7 +61,7 @@ for index, item in enumerate(focus_items):
 st.divider()
 
 st.subheader("Featured Sections")
-card_cols = st.columns(4)
+card_cols = st.columns(5)
 projects = [
     {
         "title": "Marketing Mix Modelling",
@@ -72,6 +72,11 @@ projects = [
         "title": "Geo-based Incrementality Test",
         "status": "Case study",
         "body": "Matched-market and synthetic-control views for market-level lift, pre-period fit, DiD estimation, and causal validity.",
+    },
+    {
+        "title": "Customer Segmentation",
+        "status": "Case study",
+        "body": "Premium menswear customer clustering with feature engineering, segment economics, affinity signals, and activation logic.",
     },
     {
         "title": "Third-party Data Dashboard",

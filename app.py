@@ -27,6 +27,11 @@ pages = [
         icon=":material/map:",
     ),
     st.Page(
+        "pages/5_Luxury_Customer_Segmentation.py",
+        title="Customer Segmentation",
+        icon=":material/groups:",
+    ),
+    st.Page(
         "pages/3_Third_Party_Data_Dashboard.py",
         title="Third-party Data Dashboard",
         icon=":material/dashboard:",

@@ -56,10 +56,11 @@ Current tabs/pages:
 1. App Introduction
 2. Marketing Mix Modelling
 3. Geo-based Incrementality Test
-4. Third-party Data Dashboard
-5. Macro-economy & Financial KPI Tracker
+4. Customer Segmentation
+5. Third-party Data Dashboard
+6. Macro-economy & Financial KPI Tracker
 
-MMM intentionally comes before Geo.
+MMM intentionally comes before Geo. Customer Segmentation intentionally comes after Geo.
 
 ## Main Files
 
@@ -70,6 +71,7 @@ pages/1_Geo_Based_Incrementality_Test.py
 pages/2_Marketing_Mix_Modelling_Google_Meridian.py
 pages/3_Third_Party_Data_Dashboard.py
 pages/4_Macro_Economy_Financial_KPI_Tracker.py
+pages/5_Luxury_Customer_Segmentation.py
 utils/data.py
 utils/theme.py
 utils/ui.py
@@ -232,6 +234,42 @@ Includes:
 
 Market matching setup uses chip-style labels, not plain text.
 
+## Customer Segmentation Page
+
+File:
+
+```text
+pages/5_Luxury_Customer_Segmentation.py
+```
+
+Data function:
+
+```text
+utils/data.py -> load_luxury_segmentation_data()
+```
+
+Includes:
+
+- Premium menswear retail customer segmentation case study
+- Customer grain and data model
+- Feature engineering
+- 10+ customer-level features including spend, frequency, recency, CLV, category breadth, tailoring intensity, online share, appointment rate, event engagement, service interactions, and discount sensitivity
+- Clustering methodology
+- Segment portfolio snapshot
+- Customer similarity map
+- Segment economics
+- Segment profile heatmap
+- Radar/profile detail
+- Product affinity
+- Lifecycle actions
+- Measurement and governance
+
+Segment color palette:
+
+```text
+utils/theme.py -> SEGMENT_COLORS
+```
+
 ## Macro KPI Page
 
 File:
@@ -276,6 +314,7 @@ files = [
     "pages/0_App_Introduction.py",
     "pages/1_Geo_Based_Incrementality_Test.py",
     "pages/2_Marketing_Mix_Modelling_Google_Meridian.py",
+    "pages/5_Luxury_Customer_Segmentation.py",
     "pages/3_Third_Party_Data_Dashboard.py",
     "pages/4_Macro_Economy_Financial_KPI_Tracker.py",
 ]
