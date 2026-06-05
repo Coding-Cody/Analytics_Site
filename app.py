@@ -33,7 +33,7 @@ pages = [
     ),
     st.Page(
         "pages/3_Third_Party_Data_Dashboard.py",
-        title="Third-party Data Dashboard",
+        title="Sales Dashboard",
         icon=":material/dashboard:",
     ),
     st.Page(

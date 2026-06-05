@@ -57,7 +57,7 @@ Current tabs/pages:
 2. Marketing Mix Modelling
 3. Geo-based Incrementality Test
 4. Customer Segmentation
-5. Third-party Data Dashboard
+5. Sales Dashboard
 6. Macro-economy & Financial KPI Tracker
 
 MMM intentionally comes before Geo. Customer Segmentation intentionally comes after Geo.
@@ -268,6 +268,46 @@ Segment color palette:
 
 ```text
 utils/theme.py -> SEGMENT_COLORS
+```
+
+## Sales Dashboard Page
+
+File:
+
+```text
+pages/3_Third_Party_Data_Dashboard.py
+```
+
+Data function:
+
+```text
+utils/data.py -> load_sales_dashboard_data()
+```
+
+Current page title in navigation:
+
+```text
+Sales Dashboard
+```
+
+Includes:
+
+- Retail sales KPI snapshot
+- Sidebar filters for date, region, channel, category, and customer segment
+- Revenue and gross margin trend
+- Channel contribution and conversion/margin quality
+- Category revenue by channel
+- Top product drill-down
+- Regional performance
+- Customer segment mix
+- Discount and margin diagnostic
+- Weekday/channel heatmap
+- Drill-down table and action readout
+
+Sales channel colors:
+
+```text
+utils/theme.py -> SALES_COLORS
 ```
 
 ## Macro KPI Page

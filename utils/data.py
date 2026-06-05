@@ -532,3 +532,121 @@ def _lifecycle_mix_for_segment(segment: str) -> list[float]:
         "Entry Luxury Gifters": [0.42, 0.28, 0.08, 0.22],
     }
     return mixes[segment]
+
+
+def load_sales_dashboard_data() -> pd.DataFrame:
+    rng = np.random.default_rng(91)
+    dates = pd.date_range("2025-01-01", "2026-03-31", freq="D")
+    regions = {
+        "Ontario": 1.18,
+        "British Columbia": 0.86,
+        "Quebec": 0.82,
+        "Alberta": 0.72,
+        "New York": 1.05,
+        "California": 1.12,
+    }
+    channels = {
+        "Store": {"traffic": 1.00, "conversion": 0.105, "aov": 430, "margin": 0.54},
+        "Ecommerce": {"traffic": 1.45, "conversion": 0.046, "aov": 310, "margin": 0.49},
+        "Clienteling": {"traffic": 0.38, "conversion": 0.182, "aov": 780, "margin": 0.57},
+        "Marketplace": {"traffic": 0.72, "conversion": 0.038, "aov": 260, "margin": 0.42},
+        "Outlet": {"traffic": 0.52, "conversion": 0.064, "aov": 225, "margin": 0.35},
+    }
+    categories = {
+        "Tailoring": {"mix": 0.24, "aov": 760, "margin": 0.56},
+        "Sportswear": {"mix": 0.28, "aov": 280, "margin": 0.52},
+        "Footwear": {"mix": 0.16, "aov": 340, "margin": 0.47},
+        "Accessories": {"mix": 0.20, "aov": 150, "margin": 0.58},
+        "Made-to-Measure": {"mix": 0.12, "aov": 1350, "margin": 0.61},
+    }
+    products = {
+        "Tailoring": ["Wool Suit", "Travel Blazer", "Dress Trouser", "Formal Shirt"],
+        "Sportswear": ["Cashmere Knit", "Performance Polo", "Overshirt", "Weekend Chino"],
+        "Footwear": ["Dress Oxford", "Suede Loafer", "Leather Sneaker", "Chelsea Boot"],
+        "Accessories": ["Silk Tie", "Leather Belt", "Pocket Square", "Merino Socks"],
+        "Made-to-Measure": ["Custom Suit", "Custom Jacket", "Custom Shirt", "Custom Trouser"],
+    }
+    customer_segments = {
+        "VIP": 0.17,
+        "Loyal": 0.28,
+        "Developing": 0.30,
+        "New": 0.18,
+        "At Risk": 0.07,
+    }
+
+    rows = []
+    row_id = 1
+    for date in dates:
+        day_of_week = date.dayofweek
+        weekend = 1.16 if day_of_week >= 5 else 0.96
+        holiday = 1.24 if date.month in {11, 12} else 1.0
+        spring = 1.13 if date.month in {3, 4, 5} else 1.0
+        trend = 1 + ((date - dates.min()).days / len(dates)) * 0.10
+        seasonality = weekend * holiday * spring * trend
+        for region, region_factor in regions.items():
+            for channel, channel_config in channels.items():
+                base_sessions = 820 * region_factor * channel_config["traffic"] * seasonality
+                sessions = max(rng.normal(base_sessions, base_sessions * 0.08), 10)
+                for category, category_config in categories.items():
+                    category_sessions = sessions * category_config["mix"] * rng.normal(1, 0.06)
+                    conversion = np.clip(
+                        channel_config["conversion"]
+                        * (1.18 if category == "Made-to-Measure" and channel == "Clienteling" else 1)
+                        * rng.normal(1, 0.08),
+                        0.005,
+                        0.35,
+                    )
+                    orders = max(int(rng.poisson(category_sessions * conversion)), 0)
+                    if orders == 0:
+                        continue
+                    units = max(int(rng.normal(orders * 1.42, max(orders * 0.18, 1))), orders)
+                    aov = (
+                        category_config["aov"]
+                        * (channel_config["aov"] / 430)
+                        * rng.lognormal(0, 0.12)
+                    )
+                    revenue = orders * aov
+                    discount_rate = np.clip(
+                        rng.normal(0.08, 0.025)
+                        + (0.08 if channel == "Outlet" else 0)
+                        + (0.04 if channel == "Marketplace" else 0),
+                        0,
+                        0.32,
+                    )
+                    net_revenue = revenue * (1 - discount_rate)
+                    margin_rate = np.clip(
+                        (category_config["margin"] * 0.62 + channel_config["margin"] * 0.38)
+                        - discount_rate * 0.48
+                        + rng.normal(0, 0.015),
+                        0.18,
+                        0.68,
+                    )
+                    gross_margin = net_revenue * margin_rate
+                    segment = rng.choice(
+                        list(customer_segments.keys()),
+                        p=list(customer_segments.values()),
+                    )
+                    rows.append(
+                        {
+                            "row_id": row_id,
+                            "date": date,
+                            "month": str(date.to_period("M")),
+                            "week": date.to_period("W").start_time,
+                            "region": region,
+                            "channel": channel,
+                            "category": category,
+                            "product": rng.choice(products[category]),
+                            "customer_segment": segment,
+                            "sessions": category_sessions,
+                            "orders": orders,
+                            "units": units,
+                            "revenue": net_revenue,
+                            "gross_margin": gross_margin,
+                            "discount_rate": discount_rate,
+                            "margin_rate": margin_rate,
+                            "average_order_value": net_revenue / orders,
+                            "conversion_rate": orders / category_sessions,
+                        }
+                    )
+                    row_id += 1
+    return pd.DataFrame(rows)

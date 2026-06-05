@@ -69,3 +69,11 @@ SEGMENT_COLORS = {
     "Digital Style Seekers": "#a9cfa9",
     "Entry Luxury Gifters": "#b7add7",
 }
+
+SALES_COLORS = {
+    "Store": "#8ecac0",
+    "Ecommerce": "#d8a9be",
+    "Clienteling": "#e7bd82",
+    "Marketplace": "#a9cfa9",
+    "Outlet": "#b7add7",
+}

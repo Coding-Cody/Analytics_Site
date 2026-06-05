@@ -79,9 +79,9 @@ projects = [
         "body": "Premium menswear customer clustering with feature engineering, segment economics, affinity signals, and activation logic.",
     },
     {
-        "title": "Third-party Data Dashboard",
-        "status": "Next build",
-        "body": "Reserved for a professional dashboard using external data, filters, KPI cards, and benchmark comparisons.",
+        "title": "Sales Dashboard",
+        "status": "Dashboard",
+        "body": "Retail sales performance workspace with KPI diagnostics, margin analysis, product drill-down, and operating views.",
     },
     {
         "title": "Macro & Financial KPI Tracker",
