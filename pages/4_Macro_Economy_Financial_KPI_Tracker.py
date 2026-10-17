@@ -45,6 +45,10 @@ filtered_cards = cards[cards["region"].isin(selected_regions)]
 filtered_trends = trends[trends["indicator"].isin(selected_indicators)]
 
 st.subheader("Executive KPI Snapshot")
+st.caption(
+    "Static snapshot checked 17 Oct 2026. Reference periods vary by release schedule; "
+    "September CPI is not yet published."
+)
 for chunk_start in range(0, len(filtered_cards), 3):
     cols = st.columns(3)
     for col, (_, row) in zip(cols, filtered_cards.iloc[chunk_start : chunk_start + 3].iterrows()):
@@ -123,13 +127,23 @@ with right:
     )
 
 with st.expander("Source and refresh notes"):
-    st.write(
+    st.markdown(
         """
-        Sources referenced for this portfolio view include Statistics Canada, Bank of
-        Canada, OECD statistical releases, and public indicator feeds. The current app
-        keeps a lightweight static snapshot so it can run locally and deploy without
-        API credentials. A production dashboard should add source-specific refresh jobs,
-        metadata timestamps, and validation checks.
+        This static snapshot was checked on **17 October 2026**. CPI is the 12-month
+        all-items change; unemployment is the seasonally adjusted national rate; the
+        policy rate is the Bank of Canada's month-end overnight target. GDP and GDP per capita
+        cards show quarter-over-quarter real growth. The monthly chart covers Canada
+        only, with each series ending at its latest published reference month.
+
+        - [CPI, August 2026](https://www150.statcan.gc.ca/n1/daily-quotidien/260914/dq260914a-eng.htm)
+        - [Labour Force Survey, September 2026](https://www150.statcan.gc.ca/n1/daily-quotidien/261009/dq261009a-eng.htm)
+        - [Bank of Canada policy rate](https://www.bankofcanada.ca/core-functions/monetary-policy/key-interest-rate/)
+        - [Canadian GDP, Q2 2026](https://www150.statcan.gc.ca/n1/daily-quotidien/260828/dq260828a-eng.htm)
+        - [OECD and G7 GDP per capita, Q1 2026](https://www.oecd.org/content/dam/oecd/en/data/insights/statistical-releases/2026/8/Growth-and-economic-well-being-oecd-08-2026.pdf)
+
+        Monthly history: [CPI](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810000402)
+        and [unemployment](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410028701).
+        This app keeps a static snapshot so it can run without API credentials.
         """
     )
     st.dataframe(filtered_cards, width="stretch", hide_index=True)

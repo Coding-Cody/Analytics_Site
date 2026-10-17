@@ -236,77 +236,108 @@ def load_macro_kpi_data() -> tuple[pd.DataFrame, pd.DataFrame]:
             {
                 "region": "Canada",
                 "indicator": "CPI inflation",
-                "value": 2.39,
+                "value": 3.0,
                 "unit": "%",
-                "period": "Mar 2026",
-                "source": "Statistics Canada / Outcome Canada public indicator feed",
+                "period": "Aug 2026",
+                "source": "Statistics Canada, CPI (18-10-0004-02)",
                 "status": "Watch",
             },
             {
                 "region": "Canada",
                 "indicator": "Unemployment rate",
-                "value": 6.7,
+                "value": 6.5,
                 "unit": "%",
-                "period": "Mar 2026",
-                "source": "Statistics Canada / Labour Force Survey",
+                "period": "Sep 2026",
+                "source": "Statistics Canada, Labour Force Survey (14-10-0287-01)",
                 "status": "Slack",
             },
             {
                 "region": "Canada",
                 "indicator": "Policy rate",
-                "value": 2.2,
+                "value": 2.25,
                 "unit": "%",
-                "period": "Apr 2026",
-                "source": "Bank of Canada",
-                "status": "Easing",
+                "period": "Sep 2026",
+                "source": "Bank of Canada, target for the overnight rate",
+                "status": "Hold",
             },
             {
                 "region": "Canada",
                 "indicator": "Real GDP growth",
-                "value": 0.97,
-                "unit": "% y/y",
-                "period": "Feb 2026",
-                "source": "Statistics Canada / Outcome Canada public indicator feed",
+                "value": 0.8,
+                "unit": "% q/q",
+                "period": "Q2 2026",
+                "source": "Statistics Canada, expenditure GDP (36-10-0104-01)",
                 "status": "Growth",
             },
             {
-                "region": "Global",
-                "indicator": "OECD real GDP per capita",
-                "value": 0.8,
-                "unit": "% 2025",
-                "period": "2025 annual",
-                "source": "OECD statistical release, May 2026",
+                "region": "OECD",
+                "indicator": "Real GDP per capita",
+                "value": 0.3,
+                "unit": "% q/q",
+                "period": "Q1 2026",
+                "source": "OECD, Growth and Economic Well-being, Aug 2026",
                 "status": "Moderate",
             },
             {
                 "region": "G7",
-                "indicator": "G7 real GDP per capita",
-                "value": 0.9,
-                "unit": "% 2025",
-                "period": "2025 annual",
-                "source": "OECD statistical release, May 2026",
+                "indicator": "Real GDP per capita",
+                "value": 0.4,
+                "unit": "% q/q",
+                "period": "Q1 2026",
+                "source": "OECD, Growth and Economic Well-being, Aug 2026",
                 "status": "Moderate",
             },
         ]
     )
 
-    months = pd.period_range("2025-04", "2026-03", freq="M").astype(str)
-    trend_rows = []
-    canada_inflation = [1.7, 1.8, 1.9, 1.9, 2.0, 2.1, 2.3, 2.4, 2.5, 2.4, 2.4, 2.39]
-    canada_unemployment = [6.8, 6.9, 6.9, 6.8, 6.7, 6.6, 6.7, 6.8, 6.8, 6.7, 6.7, 6.7]
-    boc_rate = [2.7, 2.7, 2.7, 2.45, 2.45, 2.45, 2.2, 2.2, 2.2, 2.2, 2.2, 2.2]
-    global_growth_proxy = [0.5, 0.5, 0.6, 0.6, 0.7, 0.7, 0.7, 0.8, 0.8, 0.8, 0.9, 0.9]
-    for month, inflation, unemployment, rate, growth in zip(
-        months, canada_inflation, canada_unemployment, boc_rate, global_growth_proxy
-    ):
-        trend_rows.extend(
-            [
-                {"period": month, "indicator": "Canada CPI inflation", "value": inflation, "unit": "%"},
-                {"period": month, "indicator": "Canada unemployment", "value": unemployment, "unit": "%"},
-                {"period": month, "indicator": "Bank of Canada policy rate", "value": rate, "unit": "%"},
-                {"period": month, "indicator": "Global growth monitor", "value": growth, "unit": "%"},
-            ]
-        )
+    monthly_series = {
+        "Canada CPI inflation": {
+            "2025-10": 2.2,
+            "2025-11": 2.2,
+            "2025-12": 2.4,
+            "2026-01": 2.3,
+            "2026-02": 1.8,
+            "2026-03": 2.4,
+            "2026-04": 2.8,
+            "2026-05": 3.2,
+            "2026-06": 2.8,
+            "2026-07": 3.0,
+            "2026-08": 3.0,
+        },
+        "Canada unemployment": {
+            "2025-10": 6.9,
+            "2025-11": 6.5,
+            "2025-12": 6.8,
+            "2026-01": 6.5,
+            "2026-02": 6.7,
+            "2026-03": 6.7,
+            "2026-04": 6.9,
+            "2026-05": 6.6,
+            "2026-06": 6.5,
+            "2026-07": 6.4,
+            "2026-08": 6.4,
+            "2026-09": 6.5,
+        },
+        "Bank of Canada policy rate": {
+            "2025-10": 2.25,
+            "2025-11": 2.25,
+            "2025-12": 2.25,
+            "2026-01": 2.25,
+            "2026-02": 2.25,
+            "2026-03": 2.25,
+            "2026-04": 2.25,
+            "2026-05": 2.25,
+            "2026-06": 2.25,
+            "2026-07": 2.25,
+            "2026-08": 2.25,
+            "2026-09": 2.25,
+        },
+    }
+    trend_rows = [
+        {"period": period, "indicator": indicator, "value": value, "unit": "%"}
+        for indicator, observations in monthly_series.items()
+        for period, value in observations.items()
+    ]
     return cards, pd.DataFrame(trend_rows)
 
 
