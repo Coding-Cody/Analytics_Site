@@ -320,11 +320,10 @@ pages/4_Macro_Economy_Financial_KPI_Tracker.py
 
 Includes:
 
-- Canada/global macro-financial KPI cards
-- Trend monitor
-- KPI heatmap
-- Source/refresh notes
-- Analytical framing around z-scores, policy context, real-rate pressure, metadata, API ingestion
+- Four Canada readings with explicit units, reference periods, and official release links
+- Selectable monthly Canada trend series, one measure at a time
+- Comparable Canada/OECD/G7 real GDP per capita view for the same quarter
+- Definitions, publication dates, source links, and a static snapshot table
 
 ## Data
 
