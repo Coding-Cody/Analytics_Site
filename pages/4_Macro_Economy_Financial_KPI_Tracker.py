@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import html
+import importlib
 from textwrap import dedent
 
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from utils.data import load_macro_kpi_data
+from utils import data as macro_data
 from utils.theme import MACRO_COLORS, THEME
 from utils.ui import inject_global_styles
 
@@ -206,7 +207,12 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-cards, trends = load_macro_kpi_data()
+cards, trends = macro_data.load_macro_kpi_data()
+if not {"released", "source_url"}.issubset(cards.columns) or not (
+    (cards["region"].eq("Canada") & cards["indicator"].eq("Real GDP per capita")).any()
+):
+    # Streamlit can retain an imported data module during a repository update.
+    cards, trends = importlib.reload(macro_data).load_macro_kpi_data()
 card_lookup = cards.set_index(["region", "indicator"])
 
 st.markdown(
