@@ -216,31 +216,76 @@ def inject_global_styles() -> None:
                 box-shadow: var(--shadow);
             }
             .portfolio-card {
-                height: 282px;
-                padding: 1.2rem;
+                height: 336px;
+                padding: 1.05rem;
                 display: flex;
                 flex-direction: column;
                 position: relative;
                 overflow: hidden;
-                transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+                isolation: isolate;
+                margin-bottom: 1rem;
+                transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
             }
             .portfolio-card::before {
                 content: "";
                 position: absolute;
-                inset: 0 0 auto 0;
-                height: 4px;
-                background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent-2));
+                inset: 0;
+                background:
+                    linear-gradient(135deg, var(--project-accent), transparent 38%),
+                    repeating-linear-gradient(90deg, rgba(20, 26, 22, 0.035) 0 1px, transparent 1px 28px);
+                opacity: 0.8;
+                z-index: -1;
+            }
+            .portfolio-card::after {
+                content: attr(data-index);
+                position: absolute;
+                right: 0.7rem;
+                bottom: -0.7rem;
+                color: rgba(20, 26, 22, 0.055);
+                font-size: 5.4rem;
+                font-weight: 780;
+                line-height: 1;
+                z-index: -1;
             }
             .portfolio-card:hover, .stat-card:hover {
                 border-color: rgba(20, 184, 166, 0.40);
                 box-shadow: 0 26px 58px rgba(20, 26, 22, 0.16);
                 transform: translateY(-3px);
             }
+            .project-topline {
+                display: flex;
+                justify-content: space-between;
+                gap: 0.75rem;
+                align-items: flex-start;
+                margin-bottom: 1rem;
+            }
+            .project-icon {
+                width: 2.85rem;
+                height: 2.85rem;
+                border-radius: 8px;
+                display: grid;
+                place-items: center;
+                color: var(--ink);
+                background:
+                    linear-gradient(135deg, rgba(255, 250, 240, 0.82), rgba(255, 250, 240, 0.28)),
+                    var(--project-accent);
+                border: 1px solid rgba(255, 250, 240, 0.76);
+                box-shadow: 0 16px 34px rgba(20, 26, 22, 0.14);
+            }
+            .project-icon svg {
+                width: 1.38rem;
+                height: 1.38rem;
+                stroke: currentColor;
+                stroke-width: 2;
+                fill: none;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
             .portfolio-card h3 {
-                font-size: 1.05rem;
-                line-height: 1.25;
-                min-height: 2.7rem;
-                margin: 0.5rem 0 0.65rem 0;
+                font-size: 1.18rem;
+                line-height: 1.18;
+                min-height: 2.8rem;
+                margin: 0 0 0.55rem 0;
                 display: flex;
                 align-items: flex-start;
             }
@@ -249,15 +294,37 @@ def inject_global_styles() -> None:
                 line-height: 1.55;
                 margin-bottom: 0;
             }
+            .project-body {
+                flex: 1;
+            }
+            .project-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.38rem;
+                margin-top: 0.95rem;
+            }
+            .project-tag {
+                border: 1px solid rgba(20, 26, 22, 0.08);
+                border-radius: 999px;
+                background: rgba(255, 250, 240, 0.66);
+                color: var(--muted);
+                font-size: 0.72rem;
+                font-weight: 720;
+                line-height: 1;
+                padding: 0.34rem 0.5rem;
+                white-space: nowrap;
+            }
             .status-pill {
                 display: inline-block;
-                border: 1px solid rgba(15, 118, 110, 0.25);
+                border: 1px solid rgba(20, 26, 22, 0.10);
                 border-radius: 999px;
-                color: var(--status-text);
-                background: rgba(204, 251, 241, 0.48);
-                font-size: 0.76rem;
-                font-weight: 700;
-                padding: 0.18rem 0.55rem;
+                color: var(--ink);
+                background: rgba(255, 250, 240, 0.74);
+                font-size: 0.72rem;
+                font-weight: 760;
+                letter-spacing: 0.04em;
+                padding: 0.24rem 0.58rem;
+                text-transform: uppercase;
             }
             .stat-card {
                 height: 170px;
@@ -612,13 +679,38 @@ def inject_global_styles() -> None:
     )
 
 
-def render_project_card(title: str, status: str, body: str) -> None:
+def render_project_card(
+    title: str,
+    status: str,
+    body: str,
+    icon: str = "dashboard",
+    index: int = 1,
+    tags: tuple[str, ...] = (),
+    accent: str = "rgba(20, 184, 166, 0.22)",
+) -> None:
+    icons = {
+        "analytics": '<svg viewBox="0 0 24 24"><path d="M4 19V5"></path><path d="M4 19h16"></path><path d="M8 16l3-5 3 3 5-8"></path><path d="M16 6h3v3"></path></svg>',
+        "map": '<svg viewBox="0 0 24 24"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"></path><path d="M9 3v15"></path><path d="M15 6v15"></path></svg>',
+        "groups": '<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"></circle><circle cx="17" cy="9" r="2.4"></circle><path d="M3.5 20c.7-3.4 2.2-5.2 4.5-5.2s3.8 1.8 4.5 5.2"></path><path d="M13.5 18.7c.6-2.2 1.8-3.4 3.5-3.4 1.9 0 3.1 1.4 3.7 4"></path></svg>',
+        "dashboard": '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M9 10v10"></path><path d="M13 15h4"></path></svg>',
+        "monitoring": '<svg viewBox="0 0 24 24"><path d="M4 18l5-5 4 3 7-9"></path><path d="M15 7h5v5"></path><path d="M4 6v12h16"></path></svg>',
+    }
+    icon_markup = icons.get(icon, icons["dashboard"])
+    tag_markup = "".join(
+        f'<span class="project-tag">{html.escape(tag)}</span>' for tag in tags
+    )
     st.markdown(
         f"""
-        <div class="portfolio-card">
-            <span class="status-pill">{html.escape(status)}</span>
-            <h3>{html.escape(title)}</h3>
-            <p>{html.escape(body)}</p>
+        <div class="portfolio-card" data-index="{index:02d}" style="--project-accent: {html.escape(accent)};">
+            <div class="project-topline">
+                <div class="project-icon">{icon_markup}</div>
+                <span class="status-pill">{html.escape(status)}</span>
+            </div>
+            <div class="project-body">
+                <h3>{html.escape(title)}</h3>
+                <p>{html.escape(body)}</p>
+            </div>
+            <div class="project-tags">{tag_markup}</div>
         </div>
         """,
         unsafe_allow_html=True,

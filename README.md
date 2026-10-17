@@ -1,16 +1,32 @@
 # Data Science Career Website
 
-This is a Streamlit starter project for a personal career website with project
-summaries, interactive dashboards, and saved model-result visualizations.
+An interactive Streamlit portfolio covering causal measurement, marketing science,
+customer segmentation, retail analytics, and macro-financial monitoring.
 
-## Create the Anaconda Environment
+## Quick Start
+
+Install [uv](https://docs.astral.sh/uv/), clone the repository, and run:
+
+```powershell
+git clone https://github.com/Coding-Cody/Analytics_Site.git
+cd Analytics_Site
+uv sync --locked
+uv run streamlit run app.py
+```
+
+The app will normally be available at [http://localhost:8501](http://localhost:8501).
+
+## Conda Alternative
+
+An Anaconda environment definition is retained for workflows that use Conda:
 
 ```powershell
 conda env create -f environment.yml
 conda activate career-site
+streamlit run app.py
 ```
 
-If you already created the environment and later change dependencies:
+To synchronize an existing Conda environment after dependency changes:
 
 ```powershell
 conda env update -f environment.yml --prune
@@ -22,10 +38,10 @@ conda env update -f environment.yml --prune
 streamlit run app.py
 ```
 
-Streamlit will print a local URL, usually:
+Using uv:
 
-```text
-http://localhost:8501
+```powershell
+uv run streamlit run app.py
 ```
 
 ## Project Structure
@@ -41,12 +57,28 @@ http://localhost:8501
 |   `-- data.py
 |-- .streamlit/
 |   `-- config.toml
+|-- AGENTS.md
+|-- pyproject.toml
+|-- uv.lock
+|-- .python-version
 |-- environment.yml
 |-- requirements.txt
 `-- README.md
 ```
 
-## Deploy Later
+`pyproject.toml` and `uv.lock` are the primary dependency definitions. The Conda
+and requirements files are retained for compatible deployment environments.
+
+## Development Checks
+
+```powershell
+uv run python -m compileall -q app.py pages utils
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest
+```
+
+## Deployment
 
 Good first deployment options:
 

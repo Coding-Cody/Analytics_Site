@@ -61,36 +61,73 @@ for index, item in enumerate(focus_items):
 st.divider()
 
 st.subheader("Featured Sections")
-card_cols = st.columns(5)
 projects = [
     {
         "title": "Marketing Mix Modelling",
         "status": "Deep dive",
-        "body": "Bayesian MMM concepts with hierarchical pooling, ad-stock carryover, Hill saturation, marginal returns, and planning.",
+        "body": "Bayesian measurement workspace for carryover, saturation, marginal returns, and budget planning decisions.",
+        "icon": "analytics",
+        "tags": ("Bayesian MMM", "ROI", "Planning"),
+        "accent": "rgba(20, 184, 166, 0.28)",
     },
     {
         "title": "Geo-based Incrementality Test",
         "status": "Case study",
-        "body": "Matched-market and synthetic-control views for market-level lift, pre-period fit, DiD estimation, and causal validity.",
+        "body": "Causal testing layer for matched markets, synthetic controls, lift reads, and pre-period validity checks.",
+        "icon": "map",
+        "tags": ("Causal lift", "Markets", "DiD"),
+        "accent": "rgba(37, 99, 235, 0.24)",
     },
     {
         "title": "Customer Segmentation",
         "status": "Case study",
-        "body": "Premium menswear customer clustering with feature engineering, segment economics, affinity signals, and activation logic.",
+        "body": "Luxury customer intelligence with engineered features, segment economics, affinity signals, and activation logic.",
+        "icon": "groups",
+        "tags": ("Clustering", "LTV", "Activation"),
+        "accent": "rgba(190, 24, 93, 0.20)",
     },
     {
         "title": "Sales Dashboard",
         "status": "Dashboard",
-        "body": "Retail sales performance workspace with KPI diagnostics, margin analysis, product drill-down, and operating views.",
+        "body": "Operating command surface for KPI diagnostics, margin pressure, product drill-downs, and sales performance.",
+        "icon": "dashboard",
+        "tags": ("KPI Ops", "Margin", "Drill-down"),
+        "accent": "rgba(208, 138, 29, 0.24)",
     },
     {
         "title": "Macro & Financial KPI Tracker",
         "status": "Live section",
-        "body": "Global and Canadian macro-financial indicators with KPI cards, trend charts, and monitoring context.",
+        "body": "Monitoring suite for global and Canadian indicators, financial signals, trend charts, and decision context.",
+        "icon": "monitoring",
+        "tags": ("Macro", "Markets", "Trends"),
+        "accent": "rgba(124, 58, 237, 0.20)",
     },
 ]
 
-for col, project in zip(card_cols, projects):
-    with col:
-        render_project_card(project["title"], project["status"], project["body"])
+top_featured_cols = st.columns(3)
+for index, project in enumerate(projects[:3]):
+    with top_featured_cols[index]:
+        render_project_card(
+            project["title"],
+            project["status"],
+            project["body"],
+            icon=project["icon"],
+            index=index + 1,
+            tags=project["tags"],
+            accent=project["accent"],
+        )
+
+bottom_featured_cols = st.columns(2)
+for offset, project in enumerate(projects[3:]):
+    index = offset + 3
+    with bottom_featured_cols[offset]:
+        render_project_card(
+            project["title"],
+            project["status"],
+            project["body"],
+            icon=project["icon"],
+            index=index + 1,
+            tags=project["tags"],
+            accent=project["accent"],
+        )
 
