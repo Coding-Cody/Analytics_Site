@@ -321,7 +321,7 @@ pages/4_Macro_Economy_Financial_KPI_Tracker.py
 Includes:
 
 - Four Canada readings with explicit units, reference periods, and official release links
-- Selectable monthly Canada trend series, one measure at a time
+- One three-lane monthly figure for CPI, unemployment, and the policy rate, with a shared timeline and independent labeled scales
 - August 2026 CPI component profile and a separately scaled weekly WTI spot trend through 9 October 2026
 - Comparable Canada/OECD/G7 real GDP per capita view for the same quarter
 - Definitions, publication dates, source links, and a static snapshot table

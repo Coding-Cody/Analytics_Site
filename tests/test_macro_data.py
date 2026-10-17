@@ -4,6 +4,19 @@ from utils.data import load_inflation_energy_data, load_macro_kpi_data
 
 
 class MacroSourceDataTests(unittest.TestCase):
+    def test_monthly_signal_series_keep_their_reference_months(self):
+        _, trends = load_macro_kpi_data()
+        groups = {name: rows for name, rows in trends.groupby("indicator")}
+
+        self.assertEqual(
+            set(groups),
+            {"Canada CPI inflation", "Canada unemployment", "Bank of Canada policy rate"},
+        )
+        self.assertEqual(groups["Canada CPI inflation"]["period"].max(), "2026-08")
+        self.assertEqual(groups["Canada unemployment"]["period"].max(), "2026-09")
+        self.assertEqual(groups["Bank of Canada policy rate"]["period"].max(), "2026-09")
+        self.assertEqual(set(groups["Bank of Canada policy rate"]["value"]), {2.25})
+
     def test_cpi_detail_matches_headline_card(self):
         cards, _ = load_macro_kpi_data()
         cpi, _ = load_inflation_energy_data()

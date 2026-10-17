@@ -7,6 +7,7 @@ from textwrap import dedent
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+from plotly.subplots import make_subplots
 
 from utils import data as macro_data
 from utils.theme import MACRO_COLORS, THEME
@@ -137,33 +138,6 @@ st.markdown(
             text-decoration: underline;
             text-underline-offset: 2px;
         }
-        .macro-reading {
-            border-left: 3px solid var(--series-accent);
-            padding: 0.3rem 0 0.3rem 1.1rem;
-            margin-top: 1.5rem;
-        }
-        .macro-reading-label {
-            color: __MUTED__;
-            font-size: 0.76rem;
-            text-transform: uppercase;
-            font-weight: 750;
-        }
-        .macro-reading strong {
-            display: block;
-            color: __INK__;
-            font-size: 2rem;
-            margin: 0.2rem 0;
-        }
-        .macro-reading p {
-            color: __MUTED__;
-            font-size: 0.86rem;
-            margin: 0.3rem 0;
-            line-height: 1.45;
-        }
-        .macro-reading .macro-period {
-            color: __INK__;
-            font-weight: 700;
-        }
         .macro-divider {
             border-top: 1px solid __LINE__;
             margin: 1.8rem 0 1.35rem;
@@ -225,7 +199,6 @@ st.markdown(
             .macro-section-head { display: block; }
             .macro-section-head p { margin-top: 0.35rem; }
             .macro-metric { min-height: 165px; }
-            .macro-reading { margin: 0.6rem 0 1.2rem; }
         }
     </style>
     """
@@ -308,66 +281,89 @@ st.markdown(
     """
     <div class="macro-section-head">
         <h2>Monthly signals</h2>
-        <p>October 2025–September 2026</p>
+        <p>October 2025–September 2026 · independent scales</p>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-series_specs = {
-    "Inflation": ("Canada CPI inflation", MACRO_COLORS[0], "12-month CPI change"),
-    "Unemployment": ("Canada unemployment", MACRO_COLORS[1], "Seasonally adjusted rate"),
-    "Policy rate": ("Bank of Canada policy rate", MACRO_COLORS[2], "Month-end overnight target"),
-}
-selected_series = st.radio("Monthly indicator", list(series_specs), horizontal=True, label_visibility="collapsed")
-series_name, series_color, series_basis = series_specs[selected_series]
-series_data = trends.loc[trends["indicator"].eq(series_name)].sort_values("period").copy()
-series_data["date"] = pd.to_datetime(series_data["period"])
-latest = series_data.iloc[-1]
-previous = series_data.iloc[-2]
-latest_period = pd.Period(latest["period"], freq="M").strftime("%b %Y")
-previous_period = pd.Period(previous["period"], freq="M").strftime("%b %Y")
-change = latest["value"] - previous["value"]
-change_text = "No change" if abs(change) < 0.005 else f"{change:+.1f} percentage points"
-precision = 2 if selected_series == "Policy rate" else 1
-
-left, right = st.columns([2.4, 1], gap="large")
-with left:
-    figure = go.Figure(
+signal_specs = (
+    ("CPI inflation", "Canada CPI inflation", MACRO_COLORS[0], 1, [1.5, 3.5], [2.0, 3.0]),
+    ("Unemployment", "Canada unemployment", MACRO_COLORS[1], 1, [6.0, 7.2], [6.0, 6.5, 7.0]),
+    ("Policy rate", "Bank of Canada policy rate", MACRO_COLORS[2], 2, [1.75, 2.75], [2.0, 2.5]),
+)
+signal_figure = make_subplots(rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.13)
+for row_number, (label, indicator, color, precision, y_range, y_ticks) in enumerate(signal_specs, start=1):
+    observations = trends.loc[trends["indicator"].eq(indicator)].sort_values("period")
+    dates = pd.to_datetime(observations["period"])
+    latest = observations.iloc[-1]
+    latest_period = pd.Period(latest["period"], freq="M").strftime("%b")
+    signal_figure.add_trace(
         go.Scatter(
-            x=series_data["date"],
-            y=series_data["value"],
-            mode="lines+markers",
-            line={"color": series_color, "width": 3},
-            marker={"color": series_color, "size": 7},
-            hovertemplate=f"%{{x|%b %Y}}<br>%{{y:.{precision}f}}%<extra></extra>",
-        )
+            x=dates,
+            y=observations["value"],
+            name=label,
+            mode="lines+markers" if row_number < 3 else "lines",
+            line={"color": color, "width": 3, "shape": "hv" if row_number == 3 else "linear"},
+            marker={"color": color, "size": 7},
+            hovertemplate=f"%{{x|%b %Y}}<br>{label}: %{{y:.{precision}f}}%<extra></extra>",
+        ),
+        row=row_number,
+        col=1,
     )
-    figure.update_layout(
-        height=350,
-        margin={"l": 48, "r": 24, "t": 30, "b": 40},
-        paper_bgcolor="#ffffff",
-        plot_bgcolor="#ffffff",
-        showlegend=False,
-        xaxis={"tickformat": "%b '%y", "dtick": "M2", "showgrid": False},
-        yaxis={"ticksuffix": "%", "rangemode": "tozero" if selected_series == "Inflation" else "normal"},
+    signal_figure.update_yaxes(
+        range=y_range,
+        tickvals=y_ticks,
+        ticktext=[f"{value:g}%" for value in y_ticks],
+        showgrid=True,
+        gridcolor=THEME["grid"],
+        zeroline=False,
+        fixedrange=True,
+        row=row_number,
+        col=1,
     )
-    st.plotly_chart(figure, width="stretch")
-with right:
-    st.markdown(
-        f"""
-        <div class="macro-reading" style="--series-accent: {html.escape(series_color, quote=True)}">
-            <div class="macro-reading-label">Latest reading</div>
-            <strong>{latest['value']:.{precision}f}%</strong>
-            <p class="macro-period">{html.escape(latest_period)}</p>
-            <p>{html.escape(series_basis)}</p>
-            <p>{html.escape(change_text)} from {html.escape(previous_period)}</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    axis_name = "yaxis" if row_number == 1 else f"yaxis{row_number}"
+    label_y = signal_figure.layout[axis_name].domain[1] + 0.012
+    signal_figure.add_annotation(
+        x=0,
+        y=label_y,
+        xref="paper",
+        yref="paper",
+        text=f"<b>{label}</b>",
+        showarrow=False,
+        xanchor="left",
+        yanchor="bottom",
+        font={"color": color, "size": 13},
     )
-    if selected_series == "Inflation":
-        st.caption("September CPI had not been released when this snapshot was checked.")
+    signal_figure.add_annotation(
+        x=1,
+        y=label_y,
+        xref="paper",
+        yref="paper",
+        text=f"<b>{latest['value']:.{precision}f}%</b> · {latest_period}",
+        showarrow=False,
+        xanchor="right",
+        yanchor="bottom",
+        font={"color": THEME["ink"], "size": 12},
+    )
+
+signal_figure.update_layout(
+    height=505,
+    margin={"l": 58, "r": 30, "t": 40, "b": 45},
+    paper_bgcolor=THEME["paper_bg"],
+    plot_bgcolor=THEME["plot_bg"],
+    showlegend=False,
+    hovermode="x unified",
+    font={"color": THEME["muted"]},
+)
+signal_figure.update_xaxes(showgrid=False, fixedrange=True, range=["2025-10-01", "2026-09-20"])
+signal_figure.update_xaxes(tickformat="%b '%y", dtick="M2", showticklabels=True, row=3, col=1)
+st.plotly_chart(signal_figure, width="stretch")
+st.caption(
+    "CPI ends in August; September CPI was not yet published at the 17 Oct 2026 snapshot. "
+    "Unemployment and the policy-rate series run through September. Each lane uses its own percentage scale; "
+    "the policy rate stayed at 2.25% throughout the period shown."
+)
 
 st.markdown(
     """
