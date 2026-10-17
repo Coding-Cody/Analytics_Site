@@ -322,6 +322,7 @@ Includes:
 
 - Four Canada readings with explicit units, reference periods, and official release links
 - Selectable monthly Canada trend series, one measure at a time
+- August 2026 CPI component profile and a separately scaled weekly WTI spot trend through 9 October 2026
 - Comparable Canada/OECD/G7 real GDP per capita view for the same quarter
 - Definitions, publication dates, source links, and a static snapshot table
 

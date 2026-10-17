@@ -133,7 +133,7 @@ st.markdown(
             color: __INK__;
         }
         .macro-metric-foot a, .macro-source-link {
-            color: #0b6f76;
+            color: __LINK__;
             text-decoration: underline;
             text-underline-offset: 2px;
         }
@@ -174,6 +174,36 @@ st.markdown(
             line-height: 1.5;
             margin: 0 0 0.8rem;
         }
+        .macro-lens-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.6rem;
+            margin: 0.8rem 0 0.3rem;
+        }
+        .macro-lens-stat {
+            border-left: 3px solid var(--lens-accent);
+            padding-left: 0.8rem;
+            min-width: 9rem;
+        }
+        .macro-lens-stat span, .macro-lens-stat small {
+            display: block;
+            color: __MUTED__;
+            font-size: 0.76rem;
+        }
+        .macro-lens-stat strong {
+            display: block;
+            color: __INK__;
+            font-size: 1.9rem;
+            line-height: 1.15;
+            margin: 0.15rem 0;
+        }
+        .macro-source-note {
+            color: __MUTED__;
+            font-size: 0.78rem;
+            line-height: 1.45;
+            margin: 0.15rem 0 0.6rem;
+        }
+        .macro-source-note a { color: __LINK__; }
         div[data-testid="stPlotlyChart"] {
             background: #ffffff;
             box-shadow: none;
@@ -203,14 +233,16 @@ st.markdown(
     .replace("__ACCENT__", THEME["accent"])
     .replace("__MUTED__", THEME["muted"])
     .replace("__INK__", THEME["ink"])
+    .replace("__LINK__", THEME["status_text"])
     .replace("__LINE__", THEME["line"]),
     unsafe_allow_html=True,
 )
 
 cards, trends = macro_data.load_macro_kpi_data()
-if not {"released", "source_url"}.issubset(cards.columns) or not (
+has_current_schema = {"released", "source_url"}.issubset(cards.columns) and (
     (cards["region"].eq("Canada") & cards["indicator"].eq("Real GDP per capita")).any()
-):
+)
+if not hasattr(macro_data, "load_inflation_energy_data") or not has_current_schema:
     # Streamlit can retain an imported data module during a repository update.
     cards, trends = importlib.reload(macro_data).load_macro_kpi_data()
 card_lookup = cards.set_index(["region", "indicator"])
@@ -341,6 +373,126 @@ st.markdown(
     """
     <div class="macro-divider"></div>
     <div class="macro-section-head">
+        <h2>Inflation and energy</h2>
+        <p>Two release schedules, two different units</p>
+    </div>
+    <p class="macro-method">
+        The CPI detail shows Canadian consumer-price changes. The oil series tracks a
+        US-dollar crude benchmark and is market context, not a Canadian gasoline price
+        or a CPI forecast.
+    </p>
+    """,
+    unsafe_allow_html=True,
+)
+
+cpi_detail, wti = macro_data.load_inflation_energy_data()
+cpi_lookup = cpi_detail.set_index("measure")
+wti = wti.sort_values("week_end").copy()
+wti["date"] = pd.to_datetime(wti["week_end"])
+latest_wti = wti.iloc[-1]
+previous_wti = wti.iloc[-2]
+wti_change = latest_wti["value"] - previous_wti["value"]
+wti_period = f"{latest_wti['date']:%b} {latest_wti['date'].day}, {latest_wti['date']:%Y}"
+
+cpi_col, oil_col = st.columns([1, 1], gap="large")
+with cpi_col:
+    st.markdown("**Canadian CPI** · August 2026 · 12-month change")
+    st.markdown(
+        dedent(
+            f"""
+            <div class="macro-lens-stats">
+                <div class="macro-lens-stat" style="--lens-accent: {MACRO_COLORS[0]}">
+                    <span>ALL ITEMS</span><strong>{cpi_lookup.loc['All-items CPI', 'value']:.1f}%</strong>
+                    <small>Headline inflation</small>
+                </div>
+                <div class="macro-lens-stat" style="--lens-accent: {MACRO_COLORS[1]}">
+                    <span>EXCLUDING GASOLINE</span>
+                    <strong>{cpi_lookup.loc['CPI excluding gasoline', 'value']:.1f}%</strong>
+                    <small>Recalculated aggregate</small>
+                </div>
+            </div>
+            """
+        ).strip(),
+        unsafe_allow_html=True,
+    )
+    component_names = ["Food purchased from stores", "Shelter", "Transportation", "Gasoline"]
+    components = cpi_lookup.loc[component_names]
+    component_figure = go.Figure(
+        go.Bar(
+            x=components["value"],
+            y=["Groceries", "Shelter", "Transport", "Gasoline"],
+            customdata=component_names,
+            orientation="h",
+            marker_color=[MACRO_COLORS[1], MACRO_COLORS[0], MACRO_COLORS[3], MACRO_COLORS[2]],
+            text=[f"{value:.1f}%" for value in components["value"]],
+            textposition="outside",
+            hovertemplate="%{customdata}<br>%{x:.1f}% over 12 months<extra></extra>",
+        )
+    )
+    component_figure.update_layout(
+        height=270,
+        margin={"l": 90, "r": 42, "t": 12, "b": 38},
+        paper_bgcolor=THEME["paper_bg"],
+        plot_bgcolor=THEME["plot_bg"],
+        showlegend=False,
+        xaxis={"range": [0, 26], "ticksuffix": "%", "dtick": 5, "showgrid": True},
+        yaxis={"autorange": "reversed", "showgrid": False},
+    )
+    st.plotly_chart(component_figure, width="stretch")
+    st.markdown(
+        f'<p class="macro-source-note">Source: <a href="{html.escape(cpi_detail.iloc[0]["source_url"], quote=True)}" '
+        'target="_blank" rel="noopener noreferrer">Statistics Canada, August CPI</a> (released 14 Sep 2026). '
+        "Category rates are not contributions to headline CPI.</p>",
+        unsafe_allow_html=True,
+    )
+
+with oil_col:
+    st.markdown("**WTI crude oil** · Cushing spot · weekly average")
+    st.markdown(
+        dedent(
+            f"""
+            <div class="macro-lens-stats">
+                <div class="macro-lens-stat" style="--lens-accent: {THEME['gold']}">
+                    <span>WEEK ENDING {html.escape(wti_period.upper())}</span>
+                    <strong>${latest_wti['value']:.2f}</strong>
+                    <small>USD per barrel · {wti_change:+.2f} from prior week</small>
+                </div>
+            </div>
+            """
+        ).strip(),
+        unsafe_allow_html=True,
+    )
+    oil_figure = go.Figure(
+        go.Scatter(
+            x=wti["date"],
+            y=wti["value"],
+            mode="lines+markers",
+            line={"color": THEME["gold"], "width": 3},
+            marker={"color": THEME["gold"], "size": 7},
+            hovertemplate="Week ending %{x|%d %b %Y}<br>$%{y:.2f} per barrel<extra></extra>",
+        )
+    )
+    oil_figure.update_layout(
+        height=270,
+        margin={"l": 52, "r": 22, "t": 12, "b": 38},
+        paper_bgcolor=THEME["paper_bg"],
+        plot_bgcolor=THEME["plot_bg"],
+        showlegend=False,
+        xaxis={"tickformat": "%b %d", "dtick": "M1", "showgrid": False},
+        yaxis={"tickprefix": "$", "range": [wti["value"].min() - 5, wti["value"].max() + 5], "showgrid": True},
+    )
+    st.plotly_chart(oil_figure, width="stretch")
+    st.markdown(
+        f'<p class="macro-source-note">Source: <a href="{html.escape(latest_wti["source_url"], quote=True)}" '
+        'target="_blank" rel="noopener noreferrer">US EIA weekly WTI spot series</a> (released 15 Oct 2026). '
+        "US benchmark; not a Canadian pump price.</p>",
+        unsafe_allow_html=True,
+    )
+
+st.markdown(
+    """
+    <div class="macro-divider"></div>
+    <div class="macro-section-head">
         <h2>GDP per person</h2>
         <p>Real growth from the previous quarter · Q1 2026</p>
     </div>
@@ -388,6 +540,9 @@ with st.expander("Definitions, releases and data table"):
         Monthly history: [Statistics Canada CPI](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810000402),
         [Labour Force Survey](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410028701),
         and [Bank of Canada policy rate](https://www.bankofcanada.ca/core-functions/monetary-policy/key-interest-rate/).
+        The CPI component view uses the August 2026 release. WTI is the US EIA weekly
+        Cushing spot average, in US dollars per barrel, through the week ending
+        9 October 2026; it is not a Canadian retail fuel-price measure.
         """
     )
     source_table = cards[["region", "indicator", "value", "period", "released", "source_url"]].copy()

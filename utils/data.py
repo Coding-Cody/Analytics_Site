@@ -357,6 +357,48 @@ def load_macro_kpi_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     return cards, pd.DataFrame(trend_rows)
 
 
+def load_inflation_energy_data() -> tuple[pd.DataFrame, pd.DataFrame]:
+    cpi_source = "https://www150.statcan.gc.ca/n1/daily-quotidien/260914/dq260914a-eng.htm"
+    cpi = pd.DataFrame(
+        [
+            {"measure": "All-items CPI", "value": 3.0},
+            {"measure": "CPI excluding gasoline", "value": 2.4},
+            {"measure": "Food purchased from stores", "value": 2.8},
+            {"measure": "Shelter", "value": 1.5},
+            {"measure": "Transportation", "value": 7.5},
+            {"measure": "Gasoline", "value": 22.8},
+        ]
+    )
+    cpi["period"] = "Aug 2026"
+    cpi["unit"] = "12-month % change"
+    cpi["source_url"] = cpi_source
+
+    wti_source = "https://www.eia.gov/dnav/pet/hist/leafhandler.ashx?f=w&n=pet&s=rwtc"
+    wti = pd.DataFrame(
+        [
+            ("2026-07-03", 70.48),
+            ("2026-07-10", 72.26),
+            ("2026-07-17", 80.77),
+            ("2026-07-24", 88.58),
+            ("2026-07-31", 84.51),
+            ("2026-08-07", 78.94),
+            ("2026-08-14", 84.05),
+            ("2026-08-21", 87.35),
+            ("2026-08-28", 84.62),
+            ("2026-09-04", 91.18),
+            ("2026-09-11", 99.08),
+            ("2026-09-18", 103.54),
+            ("2026-09-25", 93.57),
+            ("2026-10-02", 98.07),
+            ("2026-10-09", 96.88),
+        ],
+        columns=["week_end", "value"],
+    )
+    wti["unit"] = "USD per barrel"
+    wti["source_url"] = wti_source
+    return cpi, wti
+
+
 def load_luxury_segmentation_data() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     rng = np.random.default_rng(71)
     segment_config = {
