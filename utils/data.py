@@ -334,23 +334,28 @@ def load_macro_kpi_data() -> tuple[pd.DataFrame, pd.DataFrame]:
             "2026-08": 6.4,
             "2026-09": 6.5,
         },
-        "Bank of Canada policy rate": {
-            "2025-10": 2.25,
-            "2025-11": 2.25,
-            "2025-12": 2.25,
-            "2026-01": 2.25,
-            "2026-02": 2.25,
-            "2026-03": 2.25,
-            "2026-04": 2.25,
-            "2026-05": 2.25,
-            "2026-06": 2.25,
-            "2026-07": 2.25,
-            "2026-08": 2.25,
-            "2026-09": 2.25,
+        "Bank of Canada USD/CAD": {
+            "2025-10": 1.3992,
+            "2025-11": 1.4055,
+            "2025-12": 1.3802,
+            "2026-01": 1.3778,
+            "2026-02": 1.3651,
+            "2026-03": 1.3717,
+            "2026-04": 1.3751,
+            "2026-05": 1.3723,
+            "2026-06": 1.4040,
+            "2026-07": 1.4107,
+            "2026-08": 1.3898,
+            "2026-09": 1.3962,
         },
     }
     trend_rows = [
-        {"period": period, "indicator": indicator, "value": value, "unit": "%"}
+        {
+            "period": period,
+            "indicator": indicator,
+            "value": value,
+            "unit": "CAD per USD" if indicator == "Bank of Canada USD/CAD" else "%",
+        }
         for indicator, observations in monthly_series.items()
         for period, value in observations.items()
     ]

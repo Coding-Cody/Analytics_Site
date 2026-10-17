@@ -290,7 +290,7 @@ st.markdown(
 signal_specs = (
     ("CPI inflation", "Canada CPI inflation", MACRO_COLORS[0], 1, [1.5, 3.5], [2.0, 3.0]),
     ("Unemployment", "Canada unemployment", MACRO_COLORS[1], 1, [6.0, 7.2], [6.0, 6.5, 7.0]),
-    ("Policy rate", "Bank of Canada policy rate", MACRO_COLORS[2], 2, [1.75, 2.75], [2.0, 2.5]),
+    ("USD/CAD · CAD per USD", "Bank of Canada USD/CAD", MACRO_COLORS[2], 4, [1.35, 1.42], [1.36, 1.39, 1.42]),
 )
 signal_figure = make_subplots(rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.13)
 for row_number, (label, indicator, color, precision, y_range, y_ticks) in enumerate(signal_specs, start=1):
@@ -298,15 +298,18 @@ for row_number, (label, indicator, color, precision, y_range, y_ticks) in enumer
     dates = pd.to_datetime(observations["period"])
     latest = observations.iloc[-1]
     latest_period = pd.Period(latest["period"], freq="M").strftime("%b")
+    unit = observations["unit"].iloc[0]
+    hover_unit = "%" if unit == "%" else " CAD per USD"
+    display_value = f"{latest['value']:.{precision}f}{'%' if unit == '%' else ' CAD'}"
     signal_figure.add_trace(
         go.Scatter(
             x=dates,
             y=observations["value"],
             name=label,
-            mode="lines+markers" if row_number < 3 else "lines",
-            line={"color": color, "width": 3, "shape": "hv" if row_number == 3 else "linear"},
+            mode="lines+markers",
+            line={"color": color, "width": 3},
             marker={"color": color, "size": 7},
-            hovertemplate=f"%{{x|%b %Y}}<br>{label}: %{{y:.{precision}f}}%<extra></extra>",
+            hovertemplate=f"%{{x|%b %Y}}<br>{label}: %{{y:.{precision}f}}{hover_unit}<extra></extra>",
         ),
         row=row_number,
         col=1,
@@ -314,7 +317,7 @@ for row_number, (label, indicator, color, precision, y_range, y_ticks) in enumer
     signal_figure.update_yaxes(
         range=y_range,
         tickvals=y_ticks,
-        ticktext=[f"{value:g}%" for value in y_ticks],
+        ticktext=[f"{value:g}{'%' if unit == '%' else ''}" for value in y_ticks],
         showgrid=True,
         gridcolor=THEME["grid"],
         zeroline=False,
@@ -340,7 +343,7 @@ for row_number, (label, indicator, color, precision, y_range, y_ticks) in enumer
         y=label_y,
         xref="paper",
         yref="paper",
-        text=f"<b>{latest['value']:.{precision}f}%</b> · {latest_period}",
+        text=f"<b>{display_value}</b> · {latest_period}",
         showarrow=False,
         xanchor="right",
         yanchor="bottom",
@@ -361,8 +364,8 @@ signal_figure.update_xaxes(tickformat="%b '%y", dtick="M2", showticklabels=True,
 st.plotly_chart(signal_figure, width="stretch")
 st.caption(
     "CPI ends in August; September CPI was not yet published at the 17 Oct 2026 snapshot. "
-    "Unemployment and the policy-rate series run through September. Each lane uses its own percentage scale; "
-    "the policy rate stayed at 2.25% throughout the period shown."
+    "Unemployment and USD/CAD run through September. USD/CAD is the Bank of Canada's monthly average "
+    "Canadian dollars per US dollar. Each lane has its own scale and unit."
 )
 
 st.markdown(
@@ -535,7 +538,9 @@ with st.expander("Definitions, releases and data table"):
 
         Monthly history: [Statistics Canada CPI](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810000402),
         [Labour Force Survey](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410028701),
-        and [Bank of Canada policy rate](https://www.bankofcanada.ca/core-functions/monetary-policy/key-interest-rate/).
+        and [Bank of Canada monthly USD/CAD](https://www.bankofcanada.ca/rates/exchange/monthly-exchange-rates/).
+        The policy-rate snapshot card uses the
+        [Bank of Canada policy rate](https://www.bankofcanada.ca/core-functions/monetary-policy/key-interest-rate/).
         The CPI component view uses the August 2026 release. WTI is the US EIA weekly
         Cushing spot average, in US dollars per barrel, through the week ending
         9 October 2026; it is not a Canadian retail fuel-price measure.

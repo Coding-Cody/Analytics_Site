@@ -10,12 +10,16 @@ class MacroSourceDataTests(unittest.TestCase):
 
         self.assertEqual(
             set(groups),
-            {"Canada CPI inflation", "Canada unemployment", "Bank of Canada policy rate"},
+            {"Canada CPI inflation", "Canada unemployment", "Bank of Canada USD/CAD"},
         )
         self.assertEqual(groups["Canada CPI inflation"]["period"].max(), "2026-08")
         self.assertEqual(groups["Canada unemployment"]["period"].max(), "2026-09")
-        self.assertEqual(groups["Bank of Canada policy rate"]["period"].max(), "2026-09")
-        self.assertEqual(set(groups["Bank of Canada policy rate"]["value"]), {2.25})
+        fx = groups["Bank of Canada USD/CAD"].sort_values("period")
+        self.assertEqual(len(fx), 12)
+        self.assertEqual(fx["period"].iloc[-1], "2026-09")
+        self.assertEqual(fx["value"].iloc[-1], 1.3962)
+        self.assertGreater(fx["value"].nunique(), 1)
+        self.assertEqual(set(fx["unit"]), {"CAD per USD"})
 
     def test_cpi_detail_matches_headline_card(self):
         cards, _ = load_macro_kpi_data()
