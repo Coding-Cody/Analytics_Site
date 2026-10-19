@@ -240,8 +240,7 @@ def load_macro_kpi_data() -> tuple[pd.DataFrame, pd.DataFrame]:
                 "unit": "%",
                 "period": "Aug 2026",
                 "source": "Statistics Canada, CPI (18-10-0004-02)",
-                "released": "14 Sep 2026",
-                "source_url": "https://www150.statcan.gc.ca/n1/daily-quotidien/260914/dq260914a-eng.htm",
+                "status": "Watch",
             },
             {
                 "region": "Canada",
@@ -250,18 +249,16 @@ def load_macro_kpi_data() -> tuple[pd.DataFrame, pd.DataFrame]:
                 "unit": "%",
                 "period": "Sep 2026",
                 "source": "Statistics Canada, Labour Force Survey (14-10-0287-01)",
-                "released": "9 Oct 2026",
-                "source_url": "https://www150.statcan.gc.ca/n1/daily-quotidien/261009/dq261009a-eng.htm",
+                "status": "Slack",
             },
             {
                 "region": "Canada",
                 "indicator": "Policy rate",
                 "value": 2.25,
                 "unit": "%",
-                "period": "As of 17 Oct 2026",
+                "period": "Sep 2026",
                 "source": "Bank of Canada, target for the overnight rate",
-                "released": "2 Sep 2026",
-                "source_url": "https://www.bankofcanada.ca/2026/09/fad-press-release-2026-09-02/",
+                "status": "Hold",
             },
             {
                 "region": "Canada",
@@ -270,18 +267,7 @@ def load_macro_kpi_data() -> tuple[pd.DataFrame, pd.DataFrame]:
                 "unit": "% q/q",
                 "period": "Q2 2026",
                 "source": "Statistics Canada, expenditure GDP (36-10-0104-01)",
-                "released": "28 Aug 2026",
-                "source_url": "https://www150.statcan.gc.ca/n1/daily-quotidien/260828/dq260828a-eng.htm",
-            },
-            {
-                "region": "Canada",
-                "indicator": "Real GDP per capita",
-                "value": 0.2,
-                "unit": "% q/q",
-                "period": "Q1 2026",
-                "source": "OECD, Growth and Economic Well-being, Aug 2026",
-                "released": "6 Aug 2026",
-                "source_url": "https://www.oecd.org/content/dam/oecd/en/data/insights/statistical-releases/2026/8/Growth-and-economic-well-being-oecd-08-2026.pdf",
+                "status": "Growth",
             },
             {
                 "region": "OECD",
@@ -290,8 +276,7 @@ def load_macro_kpi_data() -> tuple[pd.DataFrame, pd.DataFrame]:
                 "unit": "% q/q",
                 "period": "Q1 2026",
                 "source": "OECD, Growth and Economic Well-being, Aug 2026",
-                "released": "6 Aug 2026",
-                "source_url": "https://www.oecd.org/content/dam/oecd/en/data/insights/statistical-releases/2026/8/Growth-and-economic-well-being-oecd-08-2026.pdf",
+                "status": "Moderate",
             },
             {
                 "region": "G7",
@@ -300,8 +285,7 @@ def load_macro_kpi_data() -> tuple[pd.DataFrame, pd.DataFrame]:
                 "unit": "% q/q",
                 "period": "Q1 2026",
                 "source": "OECD, Growth and Economic Well-being, Aug 2026",
-                "released": "6 Aug 2026",
-                "source_url": "https://www.oecd.org/content/dam/oecd/en/data/insights/statistical-releases/2026/8/Growth-and-economic-well-being-oecd-08-2026.pdf",
+                "status": "Moderate",
             },
         ]
     )
@@ -334,74 +318,27 @@ def load_macro_kpi_data() -> tuple[pd.DataFrame, pd.DataFrame]:
             "2026-08": 6.4,
             "2026-09": 6.5,
         },
-        "Bank of Canada USD/CAD": {
-            "2025-10": 1.3992,
-            "2025-11": 1.4055,
-            "2025-12": 1.3802,
-            "2026-01": 1.3778,
-            "2026-02": 1.3651,
-            "2026-03": 1.3717,
-            "2026-04": 1.3751,
-            "2026-05": 1.3723,
-            "2026-06": 1.4040,
-            "2026-07": 1.4107,
-            "2026-08": 1.3898,
-            "2026-09": 1.3962,
+        "Bank of Canada policy rate": {
+            "2025-10": 2.25,
+            "2025-11": 2.25,
+            "2025-12": 2.25,
+            "2026-01": 2.25,
+            "2026-02": 2.25,
+            "2026-03": 2.25,
+            "2026-04": 2.25,
+            "2026-05": 2.25,
+            "2026-06": 2.25,
+            "2026-07": 2.25,
+            "2026-08": 2.25,
+            "2026-09": 2.25,
         },
     }
     trend_rows = [
-        {
-            "period": period,
-            "indicator": indicator,
-            "value": value,
-            "unit": "CAD per USD" if indicator == "Bank of Canada USD/CAD" else "%",
-        }
+        {"period": period, "indicator": indicator, "value": value, "unit": "%"}
         for indicator, observations in monthly_series.items()
         for period, value in observations.items()
     ]
     return cards, pd.DataFrame(trend_rows)
-
-
-def load_inflation_energy_data() -> tuple[pd.DataFrame, pd.DataFrame]:
-    cpi_source = "https://www150.statcan.gc.ca/n1/daily-quotidien/260914/dq260914a-eng.htm"
-    cpi = pd.DataFrame(
-        [
-            {"measure": "All-items CPI", "value": 3.0},
-            {"measure": "CPI excluding gasoline", "value": 2.4},
-            {"measure": "Food purchased from stores", "value": 2.8},
-            {"measure": "Shelter", "value": 1.5},
-            {"measure": "Transportation", "value": 7.5},
-            {"measure": "Gasoline", "value": 22.8},
-        ]
-    )
-    cpi["period"] = "Aug 2026"
-    cpi["unit"] = "12-month % change"
-    cpi["source_url"] = cpi_source
-
-    wti_source = "https://www.eia.gov/dnav/pet/hist/leafhandler.ashx?f=w&n=pet&s=rwtc"
-    wti = pd.DataFrame(
-        [
-            ("2026-07-03", 70.48),
-            ("2026-07-10", 72.26),
-            ("2026-07-17", 80.77),
-            ("2026-07-24", 88.58),
-            ("2026-07-31", 84.51),
-            ("2026-08-07", 78.94),
-            ("2026-08-14", 84.05),
-            ("2026-08-21", 87.35),
-            ("2026-08-28", 84.62),
-            ("2026-09-04", 91.18),
-            ("2026-09-11", 99.08),
-            ("2026-09-18", 103.54),
-            ("2026-09-25", 93.57),
-            ("2026-10-02", 98.07),
-            ("2026-10-09", 96.88),
-        ],
-        columns=["week_end", "value"],
-    )
-    wti["unit"] = "USD per barrel"
-    wti["source_url"] = wti_source
-    return cpi, wti
 
 
 def load_luxury_segmentation_data() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
