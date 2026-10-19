@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-import plotly.express as px
+import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
+from plotly.subplots import make_subplots
 
-from utils.data import load_macro_kpi_data
-from utils.theme import MACRO_COLORS
+from utils.data import MACRO_SNAPSHOT_CUTOFF, load_macro_kpi_data
+from utils.theme import MACRO_COLORS, THEME
 from utils.ui import inject_global_styles, render_insight, render_kpi_card
 
 
@@ -17,9 +19,9 @@ st.markdown(
         <h1>Macro-economy and financial KPI tracker.</h1>
         <p class="hero-copy">
             A professional monitoring page for Canadian and global macro signals:
-            inflation, labour market pressure, policy rates, growth, and financial
-            context for business planning. The analytical framing emphasizes indicator
-            normalization, signal direction, policy context, and KPI monitoring.
+            inflation, labour market conditions, oil prices, and output. Each reading
+            is tied to its published period and source, with monthly trends shown on
+            separate scales so unlike units are not compared as if equivalent.
         </p>
     </section>
     """,
@@ -29,122 +31,116 @@ st.markdown(
 cards, trends = load_macro_kpi_data()
 
 with st.sidebar:
-    st.header("KPI Controls")
-    selected_regions = st.multiselect(
-        "Regions",
-        sorted(cards["region"].unique()),
-        default=sorted(cards["region"].unique()),
-    )
+    st.header("Trend controls")
     selected_indicators = st.multiselect(
-        "Trend indicators",
-        sorted(trends["indicator"].unique()),
-        default=sorted(trends["indicator"].unique()),
+        "Monthly indicators",
+        list(trends["indicator"].unique()),
+        default=list(trends["indicator"].unique()),
     )
 
-filtered_cards = cards[cards["region"].isin(selected_regions)]
 filtered_trends = trends[trends["indicator"].isin(selected_indicators)]
 
 st.subheader("Executive KPI Snapshot")
 st.caption(
-    "Static snapshot checked 17 Oct 2026. Reference periods vary by release schedule; "
-    "September CPI is not yet published."
+    f"Static snapshot through {MACRO_SNAPSHOT_CUTOFF}. Reference periods vary by release schedule; "
+    "September CPI is not included."
 )
-for chunk_start in range(0, len(filtered_cards), 3):
+for chunk_start in range(0, len(cards), 3):
     cols = st.columns(3)
-    for col, (_, row) in zip(cols, filtered_cards.iloc[chunk_start : chunk_start + 3].iterrows()):
+    for col, (_, row) in zip(cols, cards.iloc[chunk_start : chunk_start + 3].iterrows()):
         with col:
-            value = f"{row['value']:.2f}{row['unit'] if row['unit'].startswith('%') else ' ' + row['unit']}"
+            value = f"${row['value']:.2f}" if row["unit"] == "USD/bbl" else f"{row['value']:.1f}%"
             render_kpi_card(
                 f"{row['region']} | {row['indicator']}",
                 value,
-                f"{row['period']} | {row['status']}",
+                f"{row['period']} | {row['basis']}",
             )
 
 st.divider()
 
-st.markdown(
-    """
-    <div class="method-note">
-        <strong>Analytical layer:</strong> a production macro tracker should normalize
-        indicators with rolling z-scores, flag regime shifts, compare nominal rates with
-        inflation to estimate real-rate pressure, and preserve source metadata for every
-        refresh. This page structures the KPI view around growth, labour slack, inflation
-        pressure, and financing cost.
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+st.subheader("Monthly signals")
+st.caption("Canada CPI and unemployment alongside the U.S. WTI oil benchmark. Each lane uses its own unit and scale.")
 
-trend_fig = px.line(
-    filtered_trends,
-    x="period",
-    y="value",
-    color="indicator",
-    markers=True,
-    title="Macro-financial Trend Monitor",
-    labels={"period": "Period", "value": "Value", "indicator": "Indicator"},
-    color_discrete_sequence=MACRO_COLORS,
-)
-trend_fig.update_layout(hovermode="x unified")
-st.plotly_chart(trend_fig, width="stretch")
+signal_specs = {
+    "CPI inflation": ("CPI inflation", MACRO_COLORS[0], "%", ".1f"),
+    "Unemployment rate": ("Unemployment rate", MACRO_COLORS[1], "%", ".1f"),
+    "WTI crude oil": ("WTI crude oil", MACRO_COLORS[2], "USD/bbl", ".2f"),
+}
+visible_signals = [indicator for indicator in signal_specs if indicator in selected_indicators]
+if visible_signals:
+    trend_fig = make_subplots(
+        rows=len(visible_signals),
+        cols=1,
+        shared_xaxes=True,
+        vertical_spacing=0.12 if len(visible_signals) > 1 else 0,
+        subplot_titles=[signal_specs[indicator][0] for indicator in visible_signals],
+    )
+    for row_number, indicator in enumerate(visible_signals, start=1):
+        series = filtered_trends[filtered_trends["indicator"] == indicator].sort_values("period")
+        _, color, unit, precision = signal_specs[indicator]
+        dates = pd.to_datetime(series["period"] + "-01")
+        suffix = "%" if unit == "%" else " USD/bbl"
+        trend_fig.add_trace(
+            go.Scatter(
+                x=dates,
+                y=series["value"],
+                mode="lines+markers",
+                line={"color": color, "width": 2.5},
+                marker={"color": color, "size": 6},
+                hovertemplate=f"%{{x|%b %Y}}<br>%{{y:{precision}}}{suffix}<extra></extra>",
+            ),
+            row=row_number,
+            col=1,
+        )
+        trend_fig.update_yaxes(
+            title_text=unit,
+            gridcolor=THEME["grid"],
+            zeroline=False,
+            row=row_number,
+            col=1,
+        )
+    trend_fig.update_xaxes(tickformat="%b '%y", dtick="M2", showgrid=False, linecolor=THEME["line"])
+    trend_fig.update_layout(
+        height=190 * len(visible_signals) + 80,
+        showlegend=False,
+        hovermode="closest",
+        margin={"l": 58, "r": 24, "t": 48, "b": 36},
+        paper_bgcolor=THEME["soft_light"],
+        plot_bgcolor=THEME["soft_light"],
+        font={"color": THEME["ink"]},
+    )
+    trend_fig.update_annotations(font={"color": THEME["ink"], "size": 14})
+    st.plotly_chart(trend_fig, width="stretch")
+else:
+    st.info("Select a monthly indicator in the sidebar to show its trend.")
+
 render_insight(
-    "This view keeps planning context close to business KPIs: inflation affects pricing and consumer pressure, unemployment affects demand and labour conditions, and policy rates influence financing and discount-rate assumptions."
+    "Inflation signals household price pressure, unemployment describes labour slack, "
+    "and oil prices add an energy-cost benchmark. The series have different units "
+    "and release lags; their line heights are not directly comparable."
 )
 
-left, right = st.columns([1, 1], gap="small")
-with left:
-    heatmap_df = filtered_cards.copy()
-    heatmap_df["display_value"] = heatmap_df["value"]
-    heatmap_fig = px.imshow(
-        heatmap_df.pivot_table(
-            index="indicator",
-            columns="region",
-            values="display_value",
-            aggfunc="mean",
-        ),
-        text_auto=".2f",
-        aspect="auto",
-        title="KPI Heatmap by Region",
-        color_continuous_scale="Blues",
-    )
-    st.plotly_chart(heatmap_fig, width="stretch")
-
-with right:
-    st.markdown(
-        """
-        <div class="section-band paired-card">
-            <h3>Monitoring logic</h3>
-            <p>
-                The tracker is organized around signals that matter for planning:
-                demand temperature, household pressure, financing cost, and global
-                growth context. Data science work behind this type of dashboard usually
-                includes API ingestion, calendar alignment, missing-value rules, release
-                date metadata, rolling normalization, anomaly flags, and lead/lag analysis.
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+st.subheader("Release ledger")
+st.dataframe(
+    cards[["region", "indicator", "value", "unit", "period", "basis", "released", "source_url"]],
+    column_config={"source_url": st.column_config.LinkColumn("Source")},
+    width="stretch",
+    hide_index=True,
+)
 
 with st.expander("Source and refresh notes"):
     st.markdown(
-        """
-        This static snapshot was checked on **17 October 2026**. CPI is the 12-month
-        all-items change; unemployment is the seasonally adjusted national rate; the
-        policy rate is the Bank of Canada's month-end overnight target. GDP and GDP per capita
-        cards show quarter-over-quarter real growth. The monthly chart covers Canada
-        only, with each series ending at its latest published reference month.
+        f"""
+        This is a static snapshot through **{MACRO_SNAPSHOT_CUTOFF}**, not a live feed.
+        CPI is the 12-month all-items change; unemployment is seasonally adjusted;
+        WTI is the unweighted monthly average of Cushing spot prices in U.S. dollars
+        per barrel. GDP and GDP-per-capita cards show change from the previous quarter,
+        not an annualized rate. Each series ends at its latest included reference period.
 
-        - [CPI, August 2026](https://www150.statcan.gc.ca/n1/daily-quotidien/260914/dq260914a-eng.htm)
-        - [Labour Force Survey, September 2026](https://www150.statcan.gc.ca/n1/daily-quotidien/261009/dq261009a-eng.htm)
-        - [Bank of Canada policy rate](https://www.bankofcanada.ca/core-functions/monetary-policy/key-interest-rate/)
-        - [Canadian GDP, Q2 2026](https://www150.statcan.gc.ca/n1/daily-quotidien/260828/dq260828a-eng.htm)
-        - [OECD and G7 GDP per capita, Q1 2026](https://www.oecd.org/content/dam/oecd/en/data/insights/statistical-releases/2026/8/Growth-and-economic-well-being-oecd-08-2026.pdf)
-
-        Monthly history: [CPI](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810000402)
-        and [unemployment](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410028701).
-        This app keeps a static snapshot so it can run without API credentials.
+        Monthly history: [CPI](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810000402),
+        [unemployment](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410028701),
+        and [WTI oil](https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=RWTC&f=M).
+        Release links and dates are in the ledger above. No external request runs when
+        this page loads.
         """
     )
-    st.dataframe(filtered_cards, width="stretch", hide_index=True)
-

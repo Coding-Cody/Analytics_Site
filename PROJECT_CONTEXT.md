@@ -320,11 +320,11 @@ pages/4_Macro_Economy_Financial_KPI_Tracker.py
 
 Includes:
 
-- Canada/global macro-financial KPI cards
-- Trend monitor
-- KPI heatmap
-- Source/refresh notes
-- Analytical framing around z-scores, policy context, real-rate pressure, metadata, API ingestion
+- Source-linked Canada, OECD, G7, and U.S. WTI KPI cards
+- CPI, unemployment, and WTI monthly trends in one chart with separate unit scales
+- Release ledger with reference periods and publication dates
+- Static snapshot data in `utils/data.py`; monthly cards use the latest observation in each series
+- No runtime API calls or additional deployment dependencies
 
 ## Data
 

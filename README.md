@@ -28,6 +28,19 @@ Streamlit will print a local URL, usually:
 http://localhost:8501
 ```
 
+## Update the Macro Snapshot
+
+The macro page uses a static, source-linked snapshot and makes no network requests
+at runtime. In `utils/data.py`, add each new `YYYY-MM` value to the relevant
+`monthly_signals` observations in `load_macro_kpi_data()`. The newest observation
+automatically updates its KPI card. Update that signal's `source_url` and
+`released` fields, the quarterly cards when new releases arrive, and
+`MACRO_SNAPSHOT_CUTOFF`. Keep the source page and reference period together.
+
+Run `python -m unittest discover -s tests` to check the data contract before
+deploying. The working Streamlit Cloud configuration uses `environment.yml`;
+this page does not require `pyproject.toml` or `uv.lock`.
+
 ## Project Structure
 
 ```text

@@ -6,6 +6,9 @@ import pandas as pd
 from utils.theme import CHANNEL_COLORS
 
 
+MACRO_SNAPSHOT_CUTOFF = "18 Oct 2026"
+
+
 CHANNELS = {
     "Paid Search": {
         "base_spend": 82_000,
@@ -231,114 +234,116 @@ def load_synthetic_control_data() -> pd.DataFrame:
 
 
 def load_macro_kpi_data() -> tuple[pd.DataFrame, pd.DataFrame]:
-    cards = pd.DataFrame(
+    # Add each new monthly observation here; the final value also supplies its KPI card.
+    monthly_signals = (
+        {
+            "region": "Canada",
+            "indicator": "CPI inflation",
+            "unit": "%",
+            "basis": "12-month change",
+            "source": "Statistics Canada, Consumer Price Index",
+            "source_url": "https://www150.statcan.gc.ca/n1/daily-quotidien/260914/dq260914a-eng.htm",
+            "released": "14 Sep 2026",
+            "observations": {
+                "2025-10": 2.2, "2025-11": 2.2, "2025-12": 2.4,
+                "2026-01": 2.3, "2026-02": 1.8, "2026-03": 2.4,
+                "2026-04": 2.8, "2026-05": 3.2, "2026-06": 2.8,
+                "2026-07": 3.0, "2026-08": 3.0,
+            },
+        },
+        {
+            "region": "Canada",
+            "indicator": "Unemployment rate",
+            "unit": "%",
+            "basis": "Seasonally adjusted",
+            "source": "Statistics Canada, Labour Force Survey",
+            "source_url": "https://www150.statcan.gc.ca/n1/daily-quotidien/261009/dq261009a-eng.htm",
+            "released": "9 Oct 2026",
+            "observations": {
+                "2025-10": 6.9, "2025-11": 6.5, "2025-12": 6.8,
+                "2026-01": 6.5, "2026-02": 6.7, "2026-03": 6.7,
+                "2026-04": 6.9, "2026-05": 6.6, "2026-06": 6.5,
+                "2026-07": 6.4, "2026-08": 6.4, "2026-09": 6.5,
+            },
+        },
+        {
+            "region": "United States",
+            "indicator": "WTI crude oil",
+            "unit": "USD/bbl",
+            "basis": "Monthly spot-price average",
+            "source": "U.S. EIA, WTI Cushing spot price",
+            "source_url": "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=RWTC&f=M",
+            "released": "15 Oct 2026",
+            "observations": {
+                "2025-10": 60.89, "2025-11": 60.06, "2025-12": 57.97,
+                "2026-01": 60.04, "2026-02": 64.51, "2026-03": 91.38,
+                "2026-04": 100.32, "2026-05": 102.13, "2026-06": 84.81,
+                "2026-07": 80.46, "2026-08": 83.90, "2026-09": 97.31,
+            },
+        },
+    )
+    cards = []
+    trend_rows = []
+    for signal in monthly_signals:
+        observations = signal["observations"]
+        latest_period = max(observations)
+        card = {key: value for key, value in signal.items() if key != "observations"}
+        card["value"] = observations[latest_period]
+        card["period"] = pd.Timestamp(latest_period).strftime("%b %Y")
+        cards.append(card)
+        trend_rows.extend(
+            {
+                "period": period,
+                "indicator": signal["indicator"],
+                "region": signal["region"],
+                "value": value,
+                "unit": signal["unit"],
+            }
+            for period, value in observations.items()
+        )
+
+    oecd_release_url = (
+        "https://www.oecd.org/content/dam/oecd/en/data/insights/statistical-releases/2026/8/"
+        "Growth-and-economic-well-being-oecd-08-2026.pdf"
+    )
+    cards.extend(
         [
-            {
-                "region": "Canada",
-                "indicator": "CPI inflation",
-                "value": 3.0,
-                "unit": "%",
-                "period": "Aug 2026",
-                "source": "Statistics Canada, CPI (18-10-0004-02)",
-                "status": "Watch",
-            },
-            {
-                "region": "Canada",
-                "indicator": "Unemployment rate",
-                "value": 6.5,
-                "unit": "%",
-                "period": "Sep 2026",
-                "source": "Statistics Canada, Labour Force Survey (14-10-0287-01)",
-                "status": "Slack",
-            },
-            {
-                "region": "Canada",
-                "indicator": "Policy rate",
-                "value": 2.25,
-                "unit": "%",
-                "period": "Sep 2026",
-                "source": "Bank of Canada, target for the overnight rate",
-                "status": "Hold",
-            },
             {
                 "region": "Canada",
                 "indicator": "Real GDP growth",
                 "value": 0.8,
-                "unit": "% q/q",
+                "unit": "%",
                 "period": "Q2 2026",
-                "source": "Statistics Canada, expenditure GDP (36-10-0104-01)",
-                "status": "Growth",
+                "basis": "Change from previous quarter",
+                "source": "Statistics Canada, GDP by expenditure",
+                "source_url": "https://www150.statcan.gc.ca/n1/daily-quotidien/260828/dq260828a-eng.htm",
+                "released": "28 Aug 2026",
             },
             {
                 "region": "OECD",
                 "indicator": "Real GDP per capita",
                 "value": 0.3,
-                "unit": "% q/q",
+                "unit": "%",
                 "period": "Q1 2026",
-                "source": "OECD, Growth and Economic Well-being, Aug 2026",
-                "status": "Moderate",
+                "basis": "Change from previous quarter",
+                "source": "OECD, Growth and economic well-being",
+                "source_url": oecd_release_url,
+                "released": "6 Aug 2026",
             },
             {
                 "region": "G7",
                 "indicator": "Real GDP per capita",
                 "value": 0.4,
-                "unit": "% q/q",
+                "unit": "%",
                 "period": "Q1 2026",
-                "source": "OECD, Growth and Economic Well-being, Aug 2026",
-                "status": "Moderate",
+                "basis": "Change from previous quarter",
+                "source": "OECD, Growth and economic well-being",
+                "source_url": oecd_release_url,
+                "released": "6 Aug 2026",
             },
         ]
     )
-
-    monthly_series = {
-        "Canada CPI inflation": {
-            "2025-10": 2.2,
-            "2025-11": 2.2,
-            "2025-12": 2.4,
-            "2026-01": 2.3,
-            "2026-02": 1.8,
-            "2026-03": 2.4,
-            "2026-04": 2.8,
-            "2026-05": 3.2,
-            "2026-06": 2.8,
-            "2026-07": 3.0,
-            "2026-08": 3.0,
-        },
-        "Canada unemployment": {
-            "2025-10": 6.9,
-            "2025-11": 6.5,
-            "2025-12": 6.8,
-            "2026-01": 6.5,
-            "2026-02": 6.7,
-            "2026-03": 6.7,
-            "2026-04": 6.9,
-            "2026-05": 6.6,
-            "2026-06": 6.5,
-            "2026-07": 6.4,
-            "2026-08": 6.4,
-            "2026-09": 6.5,
-        },
-        "Bank of Canada policy rate": {
-            "2025-10": 2.25,
-            "2025-11": 2.25,
-            "2025-12": 2.25,
-            "2026-01": 2.25,
-            "2026-02": 2.25,
-            "2026-03": 2.25,
-            "2026-04": 2.25,
-            "2026-05": 2.25,
-            "2026-06": 2.25,
-            "2026-07": 2.25,
-            "2026-08": 2.25,
-            "2026-09": 2.25,
-        },
-    }
-    trend_rows = [
-        {"period": period, "indicator": indicator, "value": value, "unit": "%"}
-        for indicator, observations in monthly_series.items()
-        for period, value in observations.items()
-    ]
-    return cards, pd.DataFrame(trend_rows)
+    return pd.DataFrame(cards), pd.DataFrame(trend_rows)
 
 
 def load_luxury_segmentation_data() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:

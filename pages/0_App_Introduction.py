@@ -4,6 +4,7 @@ from pathlib import Path
 
 import streamlit as st
 
+from utils.theme import PLOTLY_COLORWAY, THEME
 from utils.ui import inject_global_styles, render_contact_card, render_focus_card, render_project_card
 
 
@@ -61,36 +62,59 @@ for index, item in enumerate(focus_items):
 st.divider()
 
 st.subheader("Featured Sections")
-card_cols = st.columns(5)
 projects = [
     {
         "title": "Marketing Mix Modelling",
         "status": "Deep dive",
-        "body": "Bayesian MMM concepts with hierarchical pooling, ad-stock carryover, Hill saturation, marginal returns, and planning.",
+        "body": "Bayesian measurement workspace for carryover, saturation, marginal returns, and budget planning decisions.",
+        "icon": "analytics",
+        "tags": ("Bayesian MMM", "ROI", "Planning"),
+        "accent": THEME["accent"],
     },
     {
         "title": "Geo-based Incrementality Test",
         "status": "Case study",
-        "body": "Matched-market and synthetic-control views for market-level lift, pre-period fit, DiD estimation, and causal validity.",
+        "body": "Causal testing layer for matched markets, synthetic controls, lift reads, and pre-period validity checks.",
+        "icon": "map",
+        "tags": ("Causal lift", "Markets", "DiD"),
+        "accent": PLOTLY_COLORWAY[3],
     },
     {
         "title": "Customer Segmentation",
         "status": "Case study",
-        "body": "Premium menswear customer clustering with feature engineering, segment economics, affinity signals, and activation logic.",
+        "body": "Luxury customer intelligence with engineered features, segment economics, affinity signals, and activation logic.",
+        "icon": "groups",
+        "tags": ("Clustering", "LTV", "Activation"),
+        "accent": THEME["rose"],
     },
     {
         "title": "Sales Dashboard",
         "status": "Dashboard",
-        "body": "Retail sales performance workspace with KPI diagnostics, margin analysis, product drill-down, and operating views.",
+        "body": "Operating command surface for KPI diagnostics, margin pressure, product drill-downs, and sales performance.",
+        "icon": "dashboard",
+        "tags": ("KPI Ops", "Margin", "Drill-down"),
+        "accent": THEME["gold"],
     },
     {
         "title": "Macro & Financial KPI Tracker",
         "status": "Live section",
-        "body": "Global and Canadian macro-financial indicators with KPI cards, trend charts, and monitoring context.",
+        "body": "Monitoring suite for global and Canadian indicators, financial signals, trend charts, and decision context.",
+        "icon": "monitoring",
+        "tags": ("Macro", "Markets", "Trends"),
+        "accent": THEME["accent_2"],
     },
 ]
 
-for col, project in zip(card_cols, projects):
-    with col:
-        render_project_card(project["title"], project["status"], project["body"])
+for row_start, row_projects in ((0, projects[:3]), (3, projects[3:])):
+    for offset, (col, project) in enumerate(zip(st.columns(len(row_projects)), row_projects)):
+        with col:
+            render_project_card(
+                project["title"],
+                project["status"],
+                project["body"],
+                icon=project["icon"],
+                index=row_start + offset + 1,
+                tags=project["tags"],
+                accent=project["accent"],
+            )
 
